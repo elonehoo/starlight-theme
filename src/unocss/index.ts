@@ -115,6 +115,9 @@ export function presetDestyler() {
       transformerVariantGroup(),
       transformerDirectives(),
     ],
+    safelist: [
+      'i-carbon:arrow-right',
+    ],
   }
 }
 

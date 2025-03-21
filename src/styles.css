@@ -68,15 +68,6 @@ body {
   }
 }
 
-.container-section {
-  border-color: hsl(var(--border) / 0.3);
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-}
-
-html[data-theme='dark'] .container-section {
-  border-color: hsl(var(--border));
-}
 
 @media (min-width: 1536px) {
   .container {

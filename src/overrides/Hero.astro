@@ -4,7 +4,7 @@ import LandingBackground from '../components/LandingBackground.astro'
 import LinkButton from '../components/LinkButton.astro'
 
 const { data } = Astro.locals.starlightRoute.entry
-const { title = data.title, tagline, actions = [] } = data.hero || {}
+const { title = data.title, tagline, actions = [], description = data.description } = data.hero || {}
 ---
 
 <ContainerSection>
@@ -16,50 +16,38 @@ const { title = data.title, tagline, actions = [] } = data.hero || {}
         <div class="mb-10">
           <div
             class="inline-flex items-center text-sm px-4 py-1 bg-primary/20 group-data-[theme=dark]:bg-opacity-10 text-primary ring-1 ring-inset ring-primary/500 ring-opacity-25 group-data-[theme=dark]:ring-opacity-25 hover:bg-primary/35 transition-color relative font-medium rounded-full shadow-none cursor-pointer"
+            set:html={tagline}
           >
-            <!-- {(page!.data as any).release.title} -->
           </div>
 
         </div>
         <!-- title -->
-        <div class="text-5xl font-bold tracking-tight text-dark-900 group-data-[theme=dark]:text-white sm:text-7xl">
-          A <span class="text-primary">Build UI</span> for
-          <br class="hidden lg:block">
-          Your design system
+        <div
+          class="text-5xl font-bold tracking-tight text-dark-900 group-data-[theme=dark]:text-white sm:text-7xl"
+          set:html={title}
+        >
         </div>
         <!-- desc -->
-        <div class="mt-6 text-lg tracking-tight text-gray-600 group-data-[theme=dark]:text-gray-300">
-          <span>
-            Destyler UI simplifies the creation of stunning and responsive web applications with its
-            <br class="hidden lg:block">
-            comprehensive collection of fully styled and customizable UI components designed for You.
-          </span>
+        <div
+          class="mt-6 text-lg tracking-tight text-gray-600 group-data-[theme=dark]:text-gray-300"
+          set:html={description}
+        >
+
         </div>
         <!-- action -->
-        <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
-          <a class="btn cursor-pointer" href="/guide/getting-started">
-            Get Started
-            <div class="flex-shrink-0 h-5 w-5 i-carbon:direction-straight-right" />
-          </a>
-        </div>
+        {
+          actions.length > 0 && (
+            <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
+              {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+                <LinkButton {href} {variant} class:list={[className]} {...attrs}>
+                  {text}
+                  {icon?.html && <Fragment set:html={icon.html} />}
+                </LinkButton>
+              ))}
+            </div>
+          )
+        }
       </div>
     </div>
   </div>
-  <!-- <div class="hero">
-    <LandingBackground />
-    <h1 class="title" id={PAGE_TITLE_ID} data-page-title set:html={title} />
-    {tagline && <div class="tagline" set:html={tagline} />}
-    {
-      actions.length > 0 && (
-        <div class="actions">
-          {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
-            <LinkButton {href} {variant} class:list={[className]} {...attrs}>
-              {text}
-              {icon?.html && <Fragment set:html={icon.html} />}
-            </LinkButton>
-          ))}
-        </div>
-      )
-    }
-  </div> -->
 </ContainerSection>

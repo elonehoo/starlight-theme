@@ -72,6 +72,7 @@
 <script is:inline>
   StarlightThemeProvider.updatePickers()
   document.documentElement.classList.add('theme-zinc')
+  document.documentElement.classList.add('group')
 </script>
 
 <script>
@@ -105,7 +106,15 @@
   /** Update select menu UI, document theme, and local storage state. */
   function onThemeChange(theme: Theme): void {
     StarlightThemeProvider.updatePickers(theme)
-    document.documentElement.dataset.theme = theme === 'auto' ? getPreferredColorScheme() : theme
+    const curosr = theme === 'auto' ? getPreferredColorScheme() : theme
+    document.documentElement.dataset.theme = curosr
+    if (curosr === 'dark') {
+      document.documentElement.classList.remove('light')
+    }
+    else if (curosr === 'light') {
+      document.documentElement.classList.remove('dark')
+    }
+    document.documentElement.classList.add(curosr)
     storeTheme(theme)
   }
 

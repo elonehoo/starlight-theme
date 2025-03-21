@@ -1,16 +1,52 @@
 ---
 import ContainerSection from '../components/ContainerSection.astro'
-
+import LandingBackground from '../components/LandingBackground.astro'
 import LinkButton from '../components/LinkButton.astro'
-import { PAGE_TITLE_ID } from '../constants'
 
 const { data } = Astro.locals.starlightRoute.entry
 const { title = data.title, tagline, actions = [] } = data.hero || {}
-
 ---
 
 <ContainerSection>
-  <div class="hero">
+  <div class="py-24 sm:py-32 md:py-40 relative mb-[8rem]">
+    <LandingBackground />
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 gap-16 sm:gap-y-24 flex flex-col max-w-4xl">
+      <div class="text-center relative z-[2]">
+        <!-- version alert -->
+        <div class="mb-10">
+          <div
+            class="inline-flex items-center text-sm px-4 py-1 bg-primary/20 group-data-[theme=dark]:bg-opacity-10 text-primary ring-1 ring-inset ring-primary/500 ring-opacity-25 group-data-[theme=dark]:ring-opacity-25 hover:bg-primary/35 transition-color relative font-medium rounded-full shadow-none cursor-pointer"
+          >
+            <!-- {(page!.data as any).release.title} -->
+          </div>
+
+        </div>
+        <!-- title -->
+        <div class="text-5xl font-bold tracking-tight text-dark-900 group-data-[theme=dark]:text-white sm:text-7xl">
+          A <span class="text-primary">Build UI</span> for
+          <br class="hidden lg:block">
+          Your design system
+        </div>
+        <!-- desc -->
+        <div class="mt-6 text-lg tracking-tight text-gray-600 group-data-[theme=dark]:text-gray-300">
+          <span>
+            Destyler UI simplifies the creation of stunning and responsive web applications with its
+            <br class="hidden lg:block">
+            comprehensive collection of fully styled and customizable UI components designed for You.
+          </span>
+        </div>
+        <!-- action -->
+        <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 justify-center">
+          <a class="btn cursor-pointer" href="/guide/getting-started">
+            Get Started
+            <div class="flex-shrink-0 h-5 w-5 i-carbon:direction-straight-right" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="hero">
+    <LandingBackground />
     <h1 class="title" id={PAGE_TITLE_ID} data-page-title set:html={title} />
     {tagline && <div class="tagline" set:html={tagline} />}
     {
@@ -25,66 +61,5 @@ const { title = data.title, tagline, actions = [] } = data.hero || {}
         </div>
       )
     }
-  </div>
+  </div> -->
 </ContainerSection>
-
-<style>
-  .hero {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    display: flex;
-    align-items: flex-center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  @media (min-width: 1024px) {
-    .hero {
-      padding-top: 3rem;
-      padding-bottom: 3rem;
-    }
-  }
-  @media (min-width: 768px) {
-    .hero {
-      padding-top: 2.5rem;
-      padding-bottom: 2.5rem;
-    }
-  }
-
-  .title {
-    letter-spacing: -0.05em;
-    line-height: 1.25;
-    font-weight: 700;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-  @media (min-width: 1024px) {
-    .title {
-      line-height: 1.1;
-    }
-  }
-  @media (min-width: 768px) {
-    .title {
-      font-size: 2.25rem;
-      line-height: 2.5rem;
-    }
-  }
-
-  .tagline {
-    color: hsl(var(--foreground));
-    font-weight: 300;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    max-width: 42rem;
-  }
-
-  .actions {
-    width: 100%;
-    padding-top: 0.5rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5rem;
-  }
-</style>

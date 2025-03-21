@@ -1,0 +1,60 @@
+---
+// 服务器端生成的初始点
+const initialPoints = Array.from({ length: 16 }).fill(0).map(() => [Math.random(), Math.random()])
+const initialPoly = initialPoints.map(([x, y]) => `${x * 100}% ${y * 100}%`).join(', ');
+---
+
+<div class="bg absolute inset-0 transform-gpu blur-3xl overflow-hidden" aria-hidden="true">
+  <div
+    id="polygonElement"
+    class="aspect-[1.7] h-full w-full bg-gradient-to-r from-[hsl(var(--primary))] to-white/10 lg:opacity-30 xs:opacity-50"
+    style={`clip-path: polygon(${initialPoly});`}
+  />
+</div>
+
+<script>
+const polygonElement = document.getElementById('polygonElement')
+const points = Array.from({ length: 16 }).fill(0).map(() => [Math.random(), Math.random()])
+
+function jumpVal(val: any) {
+  return Math.random() > 0.5 ? val + (Math.random() - 0.5) / 2 : Math.random()
+}
+
+let timeout: any
+function jumpPoints() {
+  for (let i = 0; i < points.length; i++) {
+    points[i] = [jumpVal(points[i][0]), jumpVal(points[i][1])]
+  }
+
+  const poly = points.map(([x, y]) => `${x * 100}% ${y * 100}%`).join(', ')
+  if (polygonElement) {
+    polygonElement.style.clipPath = `polygon(${poly})`
+  }
+
+  timeout = setTimeout(jumpPoints, 2000 + Math.random() * 1000)
+}
+
+// 在加载时开始动画
+jumpPoints()
+
+// 清除定时器
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    clearTimeout(timeout)
+  }
+  else {
+    jumpPoints()
+  }
+})
+</script>
+
+<style>
+.bg > div {
+  clip-path: circle(75%);
+  transition: clip-path 3s;
+}
+
+.light .bg > div {
+  opacity: 1 !important;
+}
+</style>

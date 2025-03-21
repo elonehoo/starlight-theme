@@ -14,6 +14,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
+    "./unocss": "./src/unocss/index.ts",
     "./styles": "./src/styles.css",
     "./schema": "./src/schema.ts",
     "./components": "./src/user-components.ts",
@@ -45,25 +46,32 @@
     "release": "bumpp package.json --commit --push --tag && pnpm -r publish --access public"
   },
   "peerDependencies": {
-    "@astrojs/starlight": ">=0.30.0"
+    "@astrojs/starlight": ">=0.30.0",
+    "@unocss/reset": ">=0.62.4",
+    "unocss": ">=0.62.4",
+    "unocss-preset-animations": ">=1.1.0"
   },
   "dependencies": {
     "@fontsource/geist-mono": "catalog:",
-    "@fontsource/geist-sans": "^5.2.5",
+    "@fontsource/geist-sans": "catalog:",
     "@pagefind/default-ui": "catalog:",
     "marked": "catalog:"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@astrojs/starlight": "catalog:",
+    "@iconify-json/carbon": "^1.2.8",
     "@types/node": "catalog:",
+    "@unocss/reset": "catalog:",
     "astro": "catalog:",
     "bumpp": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-astro": "^1.3.1",
+    "eslint-plugin-astro": "catalog:",
     "statl-del": "catalog:",
     "typescript": "catalog:",
     "unbuild": "catalog:",
+    "unocss": "catalog:",
+    "unocss-preset-animations": "catalog:",
     "vite": "catalog:"
   },
   "pnpm": {

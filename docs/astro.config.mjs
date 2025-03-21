@@ -2,9 +2,13 @@
 import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 import destylerTheme from 'starlight-theme-destyler'
+import UnoCSS from 'unocss/astro'
 
 export default defineConfig({
   integrations: [
+    UnoCSS({
+      injectReset: true,
+    }),
     starlight({
       logo: {
         dark: './src/assets/logo-dark.svg',

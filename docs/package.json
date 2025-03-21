@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@astrojs/starlight": "catalog:",
+    "@unocss/reset": "catalog:",
     "astro": "catalog:",
     "sharp": "catalog:",
-    "starlight-theme-destyler": "workspace:*"
+    "starlight-theme-destyler": "workspace:*",
+    "unocss": "catalog:",
+    "unocss-preset-animations": "catalog:"
   }
 }

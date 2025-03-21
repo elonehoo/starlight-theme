@@ -1,0 +1,156 @@
+@import './styles/variables.css';
+
+:root:root {
+  --sl-font: 'Geist Sans', sans-serif;
+  --sl-font-mono: 'Geist Mono', monospace;
+
+  --radius: 0.5rem;
+
+  --header-height: 4rem;
+
+  --sl-color-text-accent: hsl(var(--primary));
+}
+
+* {
+  border-color: hsl(var(--border));
+
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+*,
+:after :before {
+  box-sizing: border-box;
+  border: 0 solid #e5e7eb;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-family: var(--sl-font), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+
+  background-color: hsl(var(--background));
+  min-height: 100svh;
+
+  overscroll-behavior: none;
+  color: hsl(var(--foreground));
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+
+  margin: 0;
+  line-height: inherit;
+}
+
+.container-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+@media (min-width: 1800px) {
+  .container-wrapper {
+    max-width: 1536px;
+  }
+}
+
+.container-section {
+  border-color: hsl(var(--border) / 0.3);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+html[data-theme='dark'] .container-section {
+  border-color: hsl(var(--border));
+}
+
+@media (min-width: 1536px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 1536px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1536px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+
+.makrdown-wrapper:has(.container-section) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.button[data-variant='ghost'] {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: calc(var(--radius) - 2px);
+  white-space: nowrap;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.button[data-variant='ghost']:hover {
+  color: hsl(var(--accent-foreground));
+  background-color: hsl(var(--accent));
+}

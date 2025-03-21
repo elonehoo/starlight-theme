@@ -1,0 +1,34 @@
+<div class="callout">
+  <div class="callout-description">
+    <slot />
+  </div>
+</div>
+
+<style is:global>
+  .callout {
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: hsl(var(--muted) / 0.5);
+    border-width: 1px;
+    border-radius: var(--radius);
+    border-style: solid;
+    width: 100%;
+    margin-top: 1.5rem;
+    position: relative;
+  }
+
+  .callout-description {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .callout-description > p {
+    line-height: 1.625 !important;
+    margin-top: 0 !important;
+  }
+</style>

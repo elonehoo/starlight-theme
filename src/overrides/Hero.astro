@@ -1,0 +1,90 @@
+---
+import ContainerSection from '../components/ContainerSection.astro'
+
+import LinkButton from '../components/LinkButton.astro'
+import { PAGE_TITLE_ID } from '../constants'
+
+const { data } = Astro.locals.starlightRoute.entry
+const { title = data.title, tagline, actions = [] } = data.hero || {}
+
+---
+
+<ContainerSection>
+  <div class="hero">
+    <h1 class="title" id={PAGE_TITLE_ID} data-page-title set:html={title} />
+    {tagline && <div class="tagline" set:html={tagline} />}
+    {
+      actions.length > 0 && (
+        <div class="actions">
+          {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+            <LinkButton {href} {variant} class:list={[className]} {...attrs}>
+              {text}
+              {icon?.html && <Fragment set:html={icon.html} />}
+            </LinkButton>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</ContainerSection>
+
+<style>
+  .hero {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: flex-center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .hero {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+  }
+
+  .title {
+    letter-spacing: -0.05em;
+    line-height: 1.25;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  @media (min-width: 1024px) {
+    .title {
+      line-height: 1.1;
+    }
+  }
+  @media (min-width: 768px) {
+    .title {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  .tagline {
+    color: hsl(var(--foreground));
+    font-weight: 300;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    max-width: 42rem;
+  }
+
+  .actions {
+    width: 100%;
+    padding-top: 0.5rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>

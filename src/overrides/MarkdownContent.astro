@@ -1,0 +1,17 @@
+---
+import '@astrojs/starlight/style/markdown.css'
+import '../styles/mdx.css'
+---
+
+<div class="makrdown-wrapper">
+  <div class="sl-markdown-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .makrdown-wrapper {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+</style>

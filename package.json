@@ -1,0 +1,74 @@
+{
+  "name": "starlight-theme-destyler",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Starter template for TypeScript",
+  "author": "Elone Hoo <hi@elonehoo.me>",
+  "license": "MIT",
+  "homepage": "https://github.com/destyler/theme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/destyler/theme"
+  },
+  "bugs": "https://github.com/destyler/theme/issues",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles": "./src/styles.css",
+    "./schema": "./src/schema.ts",
+    "./components": "./src/user-components.ts",
+    "./overrides/ThemeSelect.astro": "./src/overrides/ThemeSelect.astro",
+    "./overrides/PageFrame.astro": "./src/overrides/PageFrame.astro",
+    "./overrides/Header.astro": "./src/overrides/Header.astro",
+    "./overrides/SiteTitle.astro": "./src/overrides/SiteTitle.astro",
+    "./overrides/Sidebar.astro": "./src/overrides/Sidebar.astro",
+    "./overrides/TwoColumnContent.astro": "./src/overrides/TwoColumnContent.astro",
+    "./overrides/ContentPanel.astro": "./src/overrides/ContentPanel.astro",
+    "./overrides/PageTitle.astro": "./src/overrides/PageTitle.astro",
+    "./overrides/MarkdownContent.astro": "./src/overrides/MarkdownContent.astro",
+    "./overrides/Hero.astro": "./src/overrides/Hero.astro",
+    "./overrides/Footer.astro": "./src/overrides/Footer.astro",
+    "./overrides/SocialIcons.astro": "./src/overrides/SocialIcons.astro",
+    "./overrides/Pagination.astro": "./src/overrides/Pagination.astro",
+    "./overrides/Search.astro": "./src/overrides/Search.astro",
+    "./overrides/TableOfContents.astro": "./src/overrides/TableOfContents.astro",
+    "./overrides/PageSidebar.astro": "./src/overrides/PageSidebar.astro"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "dev": "pnpm -C docs dev",
+    "stale": "stale-del -u",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "release": "bumpp package.json --commit --push --tag && pnpm -r publish --access public"
+  },
+  "peerDependencies": {
+    "@astrojs/starlight": ">=0.30.0"
+  },
+  "dependencies": {
+    "@fontsource/geist-mono": "catalog:",
+    "@fontsource/geist-sans": "^5.2.5",
+    "@pagefind/default-ui": "catalog:",
+    "marked": "catalog:"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@astrojs/starlight": "catalog:",
+    "@types/node": "catalog:",
+    "astro": "catalog:",
+    "bumpp": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-astro": "^1.3.1",
+    "statl-del": "catalog:",
+    "typescript": "catalog:",
+    "unbuild": "catalog:",
+    "vite": "catalog:"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

@@ -67,7 +67,7 @@ export default function starlightThemeBlack(userConfig: StarlightThemeBlackUserC
             starlightConfig.expressiveCode === false
               ? false
               : {
-                  themes: ['github-dark-default', 'github-light-default'],
+                  themes: ['vitesse-dark', 'vitesse-light'],
                   ...(typeof starlightConfig.expressiveCode === 'object' ? starlightConfig.expressiveCode : {}),
                 },
         })
@@ -78,20 +78,6 @@ export default function starlightThemeBlack(userConfig: StarlightThemeBlackUserC
             'astro:config:setup': ({ updateConfig }) => {
               updateConfig({ vite: { plugins: [vitePluginStarlightThemeBlack(config)] } })
             },
-          },
-        })
-      },
-      'i18n:setup': function ({ injectTranslations }) {
-        injectTranslations({
-          en: {
-            'theme-destyler.home': 'Home',
-            'theme-destyler.links.doc': 'Docs',
-            'theme-destyler.links.api': 'API Reference',
-          },
-          es: {
-            'theme-destyler.home': 'Inicio',
-            'theme-destyler.links.doc': 'Docs',
-            'theme-destyler.links.api': 'Referencia de la API',
           },
         })
       },

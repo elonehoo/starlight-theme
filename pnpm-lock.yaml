@@ -42,9 +42,6 @@ catalogs:
     marked:
       specifier: ^15.0.7
       version: 15.0.7
-    sharp:
-      specifier: ^0.32.5
-      version: 0.32.6
     statl-del:
       specifier: ^0.0.4
       version: 0.0.4

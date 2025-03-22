@@ -6,7 +6,7 @@ import Logo from './Logo.astro'
 ---
 
 <div class="w-full h-px bg-border flex items-center justify-center mb-3 mt-12">
-  <div class="bg-white dark:bg-black px-4">
+  <div class="bg-white group-data-[theme=dark]:bg-black px-4">
     <Logo class="w-6 h-6" />
   </div>
 </div>
@@ -36,12 +36,12 @@ import Logo from './Logo.astro'
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              class="text-sm text-gray-500 group-data-[theme=dark]:text-gray-400 hover:text-gray-600 group-data-[theme=dark]:hover:text-gray-300"
             >
               {item.text}
               <div
                 class:list={[
-                  'w-3 h-3 absolute top-0.5 -right-3.5 text-gray-400 dark:text-gray-500',
+                  'w-3 h-3 absolute top-0.5 -right-3.5 text-gray-400 group-data-[theme=dark]:text-gray-500',
                   { 'i-carbon:arrow-up-right': item?.site },
                 ]}
               />
@@ -52,7 +52,7 @@ import Logo from './Logo.astro'
     </div>
     <div
       class="flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 mt-3 lg:mt-0 lg:order-1"
-      set:html={marked.parseInline(userConfig.footer?.text || 'Published under [MIT License](https://github.com/destyler)')}
+      set:html={marked.parseInline(userConfig.footer?.text || '<a href="https://github.com/destyler" rel="noopener noreferrer" target="_blank" class="text-sm text-gray-500 group-data-[theme=dark]:text-gray-400">Published under <span class="text-gray-900 group-data-[theme=dark]:text-white">MIT License</span> </a>')}
     >
     </div>
   </div>

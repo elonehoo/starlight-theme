@@ -1,7 +1,7 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import userConfig from 'virtual:starlight-theme-destyler-config'
 import { getTranslation } from './NavBar.astro'
-import { getRelativeLocaleUrl } from 'astro:i18n'
 
 const { siteTitleHref, sidebar } = Astro.locals.starlightRoute
 ---
@@ -14,13 +14,13 @@ const { siteTitleHref, sidebar } = Astro.locals.starlightRoute
     </div>
     <div class="body">
       <div class="links-nav">
-        <a href={siteTitleHref}>{Astro.locals.t('theme-destyler.home')}</a>
+        <a href={siteTitleHref}>Home</a>
         {
           userConfig.navLinks?.map((nav) => {
             const absoluteLinkRegex = /^https?:\/\//
 
-            const link =
-              !absoluteLinkRegex.test(nav.link) && Astro.currentLocale
+            const link
+              = !absoluteLinkRegex.test(nav.link) && Astro.currentLocale
                 ? getRelativeLocaleUrl(Astro.currentLocale, nav.link)
                 : nav.link
             const label = typeof nav.label === 'string' ? nav.label : getTranslation(nav.label, nav.link, 'label')
@@ -38,13 +38,13 @@ const { siteTitleHref, sidebar } = Astro.locals.starlightRoute
       <div class="links-docs">
         {
           sidebar.map(
-            (entry) =>
+            entry =>
               entry.type !== 'link' && (
                 <div class="container-sidebar-entry">
                   <h4 class="entry-title">{entry.label}</h4>
 
                   {entry.entries.map(
-                    (link) =>
+                    link =>
                       link.type === 'link' && (
                         <a href={link.href} {...link.attrs}>
                           {link.label}

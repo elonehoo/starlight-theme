@@ -5,6 +5,12 @@ import destylerTheme from 'starlight-theme-destyler'
 import UnoCSS from 'unocss/astro'
 
 export default defineConfig({
+  markdown: {
+    shikiConfig: {
+      theme: 'vitesse-dark',
+    },
+    syntaxHighlight: 'shiki',
+  },
   integrations: [
     UnoCSS({
       injectReset: true,

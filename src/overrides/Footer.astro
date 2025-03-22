@@ -11,8 +11,8 @@ const {
   },
 } = Astro.locals.starlightRoute
 
-const showFooterInSplash =
-  template === 'splash' && !!(editUrl || lastUpdated || pagination.next || pagination.prev || config.credits)
+const showFooterInSplash
+  = template === 'splash' && !!(editUrl || lastUpdated || pagination.next || pagination.prev || config.credits)
 ---
 
 {

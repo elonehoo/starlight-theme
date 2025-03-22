@@ -1,6 +1,7 @@
 import type { StarlightPlugin } from '@astrojs/starlight/types'
 
-import { StarlightThemeBlackConfigSchema, type StarlightThemeBlackUserConfig } from './libs/config'
+import type { StarlightThemeBlackUserConfig } from './libs/config'
+import { StarlightThemeBlackConfigSchema } from './libs/config'
 import { overrideComponents } from './libs/starlight'
 import { vitePluginStarlightThemeBlack } from './libs/vite'
 

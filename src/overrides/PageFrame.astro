@@ -1,8 +1,6 @@
 ---
-import { marked } from 'marked'
-
-import userConfig from 'virtual:starlight-theme-destyler-config'
 import Drawer from '../components/Drawer.astro'
+import Footer from '../components/Footer.astro'
 
 const { hasSidebar } = Astro.locals.starlightRoute
 ---
@@ -33,13 +31,14 @@ const { hasSidebar } = Astro.locals.starlightRoute
         )
       }
     </main>
-    <footer class="footer">
+    <!-- <footer class="footer">
       <div class="container-wrapper">
         <div class="container footer-container">
           <div class="footer-text" set:html={marked.parseInline(userConfig.footerText)} />
         </div>
       </div>
-    </footer>
+    </footer> -->
+    <Footer />
   </div>
   <Drawer />
 </div>

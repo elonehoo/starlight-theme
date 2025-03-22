@@ -6,7 +6,6 @@ const linkHTMLAttributesSchema = z.record(
   z.union([z.string(), z.number(), z.boolean(), z.undefined()]),
 ) as z.Schema<Omit<HTMLAttributes<'a'>, keyof AstroBuiltinAttributes | 'children'>>
 
-// eslint-disable-next-line ts/explicit-function-return-type
 const LinkItemHTMLAttributesSchema = () => linkHTMLAttributesSchema.default({})
 
 const navLinkSchema = z.object({
@@ -35,9 +34,30 @@ const navLinkSchema = z.object({
   attrs: LinkItemHTMLAttributesSchema(),
 })
 
+const footerItem = z.object({
+  /** The text of the link. */
+  text: z.string(),
+  /** The URL of the link. */
+  url: z.string(),
+  site: z.boolean().optional().default(true),
+})
+
+const footerSocialItem = z.object({
+  /** The URL of the link. */
+  url: z.string(),
+  /** The icon of the link. */
+  icon: z.string(),
+})
+
+const footer = z.object({
+  text: z.string().optional(),
+  items: z.array(footerItem).optional(),
+  social: z.array(footerSocialItem).optional(),
+})
+
 export const StarlightThemeBlackConfigSchema = z.object({
   navLinks: z.array(navLinkSchema).optional(),
-  footerText: z.string().optional().default('Built & designed by [shadcn](https://twitter.com/shadcn). Ported to Astro Starlight by [Adrián UB](https://github.com/adrian-ub). The source code is available on [GitHub](https://github.com/adrian-ub/starlight-theme-destyler).'),
+  footer: footer.optional(),
 })
 
 export type StarlightThemeBlackUserConfig = z.input<typeof StarlightThemeBlackConfigSchema>

@@ -35,6 +35,40 @@ export default defineConfig({
               },
             },
           ],
+          footer: {
+            social: [
+              {
+                url: 'https://discord.gg/SwgESrV7HY',
+                icon: 'i-carbon:logo-discord',
+              },
+              {
+                url: 'https://x.com/elonehoo',
+                icon: 'i-carbon:logo-x',
+              },
+              {
+                url: 'https://gitub.com/destyler',
+                icon: 'i-carbon:logo-github',
+              },
+            ],
+            items: [
+              {
+                text: 'Figma Kit',
+                url: '',
+              },
+              {
+                text: 'Playground',
+                url: 'https://play.destyler.org',
+              },
+              {
+                text: 'Roadmap',
+                url: 'https://github.com/destyler/destyler/pulls?q=sort:updated-desc+is:pr+is:open',
+              },
+              {
+                text: 'Releases',
+                url: 'https://github.com/destyler/destyler/releases',
+              },
+            ],
+          },
         }),
       ],
       sidebar: [

@@ -82,7 +82,7 @@ export default defineConfig({
           label: 'Start Here',
           items: [
             { slug: 'getting-started' },
-            { slug: 'test-toc', badge: 'New' },
+            { slug: 'markdown' },
           ],
         },
       ],

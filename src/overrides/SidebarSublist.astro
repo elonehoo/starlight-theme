@@ -10,8 +10,9 @@ const { sublist, nested } = Astro.props
 ---
 
 {
-  sublist.map((entry) =>
-    entry.type === 'link' ? (
+  sublist.map(entry =>
+    entry.type === 'link'
+? (
       <a
         href={entry.href}
         aria-current={entry.isCurrent && 'page'}
@@ -21,7 +22,8 @@ const { sublist, nested } = Astro.props
         {entry.label}
         {entry.badge && <span class="entry-badge">{entry.badge.text}</span>}
       </a>
-    ) : (
+    )
+: (
       <div class="container-sidebar-entry">
         <h4 class="entry-title">{entry.label}</h4>
         <div class="container-group-link">
@@ -93,6 +95,6 @@ const { sublist, nested } = Astro.props
     padding-right: 0.375rem;
     background-color: rgb(173 250 29);
     border-radius: calc(var(--radius) - 2px);
-    margin-left: 0.5rem;
+    margin-left: 1rem;
   }
 </style>

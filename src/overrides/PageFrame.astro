@@ -91,14 +91,14 @@ const { hasSidebar } = Astro.locals.starlightRoute
   @media (min-width: 1024px) {
     .container-wrapper-main {
       gap: 2.5rem;
-      grid-template-columns: 240px minmax(0, 1fr);
+      grid-template-columns: minmax(280px, max-content) minmax(0, 1fr);
     }
   }
 
   @media (min-width: 768px) {
     .container-wrapper-main {
       gap: 1.5rem;
-      grid-template-columns: 220px minmax(0, 1fr);
+      grid-template-columns: minmax(260px, max-content) minmax(0, 1fr);
       display: grid;
     }
   }

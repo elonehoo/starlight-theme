@@ -36,18 +36,15 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute
 
 <style>
   .logo-size {
-    width: 1.5rem;
-    height: 1.5rem;
+    --at-apply: size-6;
   }
 
   .site-title {
-    gap: 0.25rem;
-    align-items: center;
-    display: flex;
-    margin-right: 0.5rem;
+    --at-apply: gap-4 items-center flex mr-2;
   }
 
   .title-text {
+    --at-apply: font-700 hidden text-3;
     font-weight: 700;
     display: none;
     font-size: 0.75rem;

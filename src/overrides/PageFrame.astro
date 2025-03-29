@@ -5,23 +5,36 @@ import Footer from '../components/Footer.astro'
 const { hasSidebar } = Astro.locals.starlightRoute
 ---
 
-<div class="layout">
-  <div class="layout__grid">
-    <header class="layout__header">
+<div class="bg-background flex flex-col min-h-[100svh] relative">
+  <div class="border-border/30 flex flex-col flex-1 dark:border-border">
+
+    <header
+      class="bg-background w-full z-50 top-0 sticky backdrop-blur
+      border-b border-b-dashed border-border h-[--header-height]"
+    >
       <div class="container-wrapper">
-        <div class="container container__header">
+        <div class="container flex items-center h-14">
           <slot name="header" />
         </div>
       </div>
     </header>
-    <main class="main">
+    <main class="flex flex-1 flex-col">
       {!hasSidebar && <slot />}
 
       {
         hasSidebar && (
           <div class="container-wrapper">
-            <div class="container container-wrapper-main">
-              <aside class="aside">
+            <div
+              class="container items-start flex-1
+              lg:gap-10 lg:grid-cols-[minmax(280px,max-content)_minmax(0,1fr)]
+              md:gap-6 md:grid-cols-[minmax(260px,max-content)_minmax(0,1fr)] md:grid
+              "
+            >
+              <aside
+                class="z-30 top-14 fixed md:sticky hidden md:block
+                border-r border-r-dashed border-border/30 dark:border-border
+                shrink-0 w-full h-[calc(100vh-3.5rem)]"
+              >
                 <slot name="sidebar" />
               </aside>
 
@@ -35,163 +48,3 @@ const { hasSidebar } = Astro.locals.starlightRoute
   </div>
   <Drawer />
 </div>
-
-<style>
-  .layout {
-    background-color: hsl(var(--background));
-    display: flex;
-    flex-direction: column;
-    min-height: 100svh;
-    position: relative;
-  }
-
-  .layout__grid {
-    border-color: hsl(var(--border) / 0.3);
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0%;
-  }
-
-  :global([data-theme='dark']) .layout__grid {
-    border-color: hsl(var(--border));
-  }
-
-  .layout__header {
-    background-color: hsl(var(--background));
-    width: 100%;
-    z-index: 50;
-    top: 0;
-    position: sticky;
-    -webkit-backdrop-filter: blur(8px);
-    height: var(--header-height);
-    border-bottom: 1px dashed hsl(var(--border));
-  }
-
-  :global([data-theme='dark']) .layout__header {
-    border-color: hsl(var(--border));
-  }
-
-  .container__header {
-    display: flex;
-    align-items: center;
-    height: 3.5rem;
-  }
-
-  .main {
-    display: flex;
-    flex: 1 1 0%;
-    flex-direction: column;
-  }
-
-  .container-wrapper-main {
-    align-items: flex-start;
-    flex: 1 1 0%;
-  }
-
-  @media (min-width: 1024px) {
-    .container-wrapper-main {
-      gap: 2.5rem;
-      grid-template-columns: minmax(280px, max-content) minmax(0, 1fr);
-    }
-  }
-
-  @media (min-width: 768px) {
-    .container-wrapper-main {
-      gap: 1.5rem;
-      grid-template-columns: minmax(260px, max-content) minmax(0, 1fr);
-      display: grid;
-    }
-  }
-
-  .aside {
-    border-color: hsl(var(--border) / 0.3);
-    border-right-width: 1px;
-    border-right-style: dashed;
-    flex-shrink: 0;
-    width: 100%;
-    height: calc(100vh - 3.5rem);
-    display: none;
-    z-index: 30;
-    top: 3.5rem;
-    position: fixed;
-  }
-
-  :global([data-theme='dark']) .aside {
-    border-color: hsl(var(--border));
-  }
-
-  @media (min-width: 768px) {
-    .aside {
-      display: block;
-      position: sticky;
-    }
-  }
-
-  .footer {
-    border-color: hsl(var(--border) / 0.3);
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-top-width: 1px;
-    border-top-style: solid;
-  }
-
-  :global([data-theme='dark']) .footer {
-    border-color: hsl(var(--border));
-  }
-  @media (min-width: 768px) {
-    .footer {
-      padding-top: 0;
-      padding-bottom: 0;
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-  }
-
-  .footer-container {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1536px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  @media (min-width: 1536px) {
-    .footer-container {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .footer-container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  .footer-text {
-    color: hsl(var(--muted-foreground));
-    line-height: 2;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    text-align: center;
-    text-wrap: balance;
-  }
-
-  @media (min-width: 768px) {
-    .footer-text {
-      text-align: left;
-    }
-  }
-</style>
-
-<style is:global>
-  .footer-text a {
-    text-underline-offset: 4px;
-    text-decoration-line: underline;
-    font-weight: 500;
-    color: inherit;
-  }
-</style>

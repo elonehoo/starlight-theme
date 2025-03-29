@@ -4,43 +4,19 @@
 
 <style is:global>
   .steps {
+    --at-apply ml-4 mb-12 pl-8 border-l;
     counter-reset: step;
-    padding-left: 2rem;
-    border-left-width: 1px;
-    margin-left: 1rem;
-    margin-bottom: 3rem;
     border-left-style: solid;
   }
 
   .steps > h3 {
+    --at-apply: text-base leading-6 font-semibold -tracking-wide mt-8 mb-4 scroll-m-20;
     counter-increment: step;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    scroll-margin: 5rem;
   }
 
   .steps > h3::before {
-    position: absolute;
-    display: inline-flex;
-    height: 2.25rem;
-    width: 2.25rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    border-width: 4px;
-    border-color: hsl(var(--background));
-    background-color: hsl(var(--muted));
-    text-align: center;
-    text-indent: -1px;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 500;
-    margin-left: -50px;
-    margin-top: -4px;
-    content: counter(step);
+    --at-apply: border-background bg-muted absolute inline-flex h-9 w-9
+    items-center justify-center text-center -indent-px text-base leading-6
+     font-medium ml-[-50px] content-[counter(step)] -mt-1 rounded-full border-4;
   }
 </style>

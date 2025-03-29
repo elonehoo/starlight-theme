@@ -16,9 +16,9 @@ const { toc, depth = 0 } = Astro.props
 
 <ul>
   {
-    toc.map((heading) => (
+    toc.map(heading => (
       <li>
-        <a href={'#' + heading.slug}>{heading.text}</a>
+        <a href={`#${heading.slug}`}>{heading.text}</a>
         {heading.children.length > 0 && <Astro.self toc={heading.children} depth={depth + 1} />}
       </li>
     ))
@@ -27,28 +27,22 @@ const { toc, depth = 0 } = Astro.props
 
 <style define:vars={{ depth }}>
   ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+    --at-apply: list-none m-0 p-0;
   }
   li {
-    padding-top: 0.5rem;
-    margin-top: 0;
+    --at-apply: pt-2 mt-0
   }
 
   a {
-    text-decoration-line: none;
-    color: hsl(var(--muted-foreground));
-    display: inline-block;
-    text-decoration: inherit;
+    --at-apply: no-underline text-muted-foreground inline-block [text-decoration:inherit];
   }
 
   a:hover {
-    color: hsl(var(--foreground));
+    --at-apply: text-foreground
   }
 
   a[aria-current] {
-    color: hsl(var(--foreground));
+    --at-apply: text-foreground
   }
 
   ul > li > ul {

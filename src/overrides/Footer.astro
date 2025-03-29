@@ -25,12 +25,7 @@ const showFooterInSplash
   )
 }
 
-{!showFooterInSplash && template === 'splash' && <div class="padding-negative" />}
+{!showFooterInSplash && template === 'splash' && <div class="mb-[-3vh]" />}
 
 {template === 'doc' && <Default />}
 
-<style>
-  .padding-negative {
-    margin-bottom: -3vh;
-  }
-</style>

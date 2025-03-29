@@ -4,18 +4,9 @@ import TableOfContents from './TableOfContents.astro'
 
 {
   Astro.locals.starlightRoute.toc && (
-    <div>
+    <div class="pt-4 h-[calc(100vh-3.5rem)] mt-[-1.5rem] top-5 sticky">
       <TableOfContents />
     </div>
   )
 }
 
-<style>
-  div {
-    padding-top: 1rem;
-    height: calc(100vh - 3.5rem);
-    margin-top: -1.5rem;
-    top: 5rem;
-    position: sticky;
-  }
-</style>

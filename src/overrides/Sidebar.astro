@@ -5,6 +5,7 @@ const { sidebar } = Astro.locals.starlightRoute
 ---
 
 <div class="sidebar overflow-auto h-full pr-4 py-6 [scrollbar-width:none] lg:py-8">
+  <slot name="header" />
   <div class="gap-6 flex-col flex">
     <SidebarSublist sublist={sidebar} />
   </div>

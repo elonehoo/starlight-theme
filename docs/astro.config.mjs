@@ -6,9 +6,6 @@ import UnoCSS from 'unocss/astro'
 
 export default defineConfig({
   markdown: {
-    shikiConfig: {
-      theme: 'vitesse-dark',
-    },
     syntaxHighlight: 'shiki',
   },
   integrations: [
@@ -19,10 +16,10 @@ export default defineConfig({
       logo: {
         dark: './src/assets/logo-dark.svg',
         light: './src/assets/logo-light.svg',
-        alt: 'Starlight Black',
+        alt: 'Destyler Theme',
       },
       editLink: {
-        baseUrl: 'https://github.com/adrian-ub/starlight-theme-destyler/edit/main/docs/',
+        baseUrl: 'https://github.com/destyler/starlight-theme-destyler/edit/main/docs/',
       },
       plugins: [
         destylerTheme({
@@ -87,7 +84,7 @@ export default defineConfig({
         },
       ],
       social: {
-        github: 'https://github.com/adrian-ub/starlight-theme-destyler',
+        github: 'https://github.com/destyler/starlight-theme-destyler',
       },
       title: '@destyler/theme',
     }),

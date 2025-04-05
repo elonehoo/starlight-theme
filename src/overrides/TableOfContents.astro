@@ -11,6 +11,7 @@ const { toc } = Astro.locals.starlightRoute
         <p id="starlight__on-this-page">Table of Contents</p>
         <TableOfContentsList toc={toc.items} />
       </nav>
+      <slot />
     </starlight-toc>
   )
 }

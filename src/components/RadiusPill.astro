@@ -5,7 +5,7 @@ interface Props {
 }
 
 const { radius, selected } = Astro.props;
-// 在 SSR 时无法确定当前选中的半径，会在客户端脚本中处理
+// Cannot determine the selected radius during SSR, will handle in client-side script
 const isSelected = radius === selected;
 ---
 
@@ -28,16 +28,16 @@ const isSelected = radius === selected;
 </button>
 
 <script>
-// 获取当前半径设置
+// Get current radius setting
 function getCurrentRadius() {
   try {
-    // 首先尝试从localStorage获取，因为这是最精确的来源
+    // First try to get from localStorage as it's the most accurate source
     const savedRadius = localStorage.getItem('destyler-radius');
     if (savedRadius !== null) {
       return parseFloat(savedRadius);
     }
 
-    // 如果localStorage中没有，则从CSS变量中获取
+    // If not in localStorage, get from CSS variable
     const radiusVar = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim();
     if (radiusVar) {
       const match = radiusVar.match(/^([\d.]+)rem$/);
@@ -52,14 +52,14 @@ function getCurrentRadius() {
   }
 }
 
-// 更新所有半径选项的选中状态
+// Update selected state for all radius options
 function updateSelectedState() {
   const currentRadius = getCurrentRadius();
 
   document.querySelectorAll('.radius-option').forEach((button) => {
     const radiusValue = button.getAttribute('data-radius-value');
-    
-    // 转换为字符串进行比较，避免类型不匹配问题
+
+    // Convert to string for comparison to avoid type mismatch
     const isSelected = radiusValue === currentRadius.toString();
 
     if (isSelected) {
@@ -77,12 +77,12 @@ function updateSelectedState() {
   });
 }
 
-// 初始化
+// Initialize
 function initialize() {
   updateSelectedState();
 }
 
-// 页面加载后初始化
+// Initialize after page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initialize);
 }
@@ -90,17 +90,17 @@ else {
   initialize();
 }
 
-// 为按钮添加点击事件
+// Add click event for buttons
 document.querySelectorAll('[data-radius-value]').forEach((button) => {
   button.addEventListener('click', () => {
     const radiusValue = parseFloat(button.getAttribute('data-radius-value') || '0');
 
-    // 强制立即更新并保存到localStorage
+    // Force immediate update and save to localStorage
     const forceUpdateRadius = (radius:any) => {
-      // 更新CSS变量
+      // Update CSS variable
       document.documentElement.style.setProperty('--radius', `${radius}rem`);
 
-      // 保存到localStorage
+      // Save to localStorage
       try {
         localStorage.setItem('destyler-radius', radius.toString());
       }
@@ -108,14 +108,14 @@ document.querySelectorAll('[data-radius-value]').forEach((button) => {
         console.warn(e);
       }
 
-      // 更新UI状态
+      // Update UI state
       updateSelectedState();
     };
 
-    // 应用并保存半径变更
+    // Apply and save radius change
     forceUpdateRadius(radiusValue);
 
-    // 触发自定义事件，以便父组件可以监听
+    // Trigger custom event for parent component to listen
     button.dispatchEvent(
       new CustomEvent('radius-selected', {
         detail: { value: radiusValue.toString() },
@@ -125,9 +125,9 @@ document.querySelectorAll('[data-radius-value]').forEach((button) => {
   });
 });
 
-// 添加全局事件监听器来响应重置事件
+// Add global event listener to respond to reset events
 document.addEventListener('radius-selected', () => {
-  // 确保在下一个微任务中更新状态，避免时序问题
+  // Ensure state updates in next microtask to avoid timing issues
   setTimeout(() => {
     updateSelectedState();
   }, 0);

@@ -31,16 +31,16 @@ const themeOptions = [
 </div>
 
 <script>
-// 获取当前主题模式设置
+// Get current theme mode setting
 function getCurrentTheme() {
   try {
-    // 首先尝试从localStorage获取
+    // First try to get from localStorage
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       return savedTheme;
     }
 
-    // 如果没有存储的主题，则检查HTML文档类来判断当前主题
+    // If no stored theme, check HTML document class to determine current theme
     if (document.documentElement.classList.contains('dark')) {
       return 'dark';
     }
@@ -48,28 +48,28 @@ function getCurrentTheme() {
       return 'light';
     }
 
-    // 默认返回系统主题
+    // Return default system theme
     return 'system';
   } catch (e) {
     return 'system';
   }
 }
 
-// 应用主题
+// Apply theme
 function applyTheme(theme: string) {
-  // 移除现有的主题类
+  // Remove existing theme classes
   document.documentElement.classList.remove('light', 'dark');
 
   if (theme === 'system') {
-    // 检测系统主题偏好
+    // Detect system theme preference
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     document.documentElement.classList.add(systemTheme);
   } else {
-    // 直接应用指定主题
+    // Directly apply specified theme
     document.documentElement.classList.add(theme);
   }
 
-  // 保存到localStorage
+  // Save to localStorage
   try {
     localStorage.setItem('theme', theme);
   } catch (e) {
@@ -77,7 +77,7 @@ function applyTheme(theme: string) {
   }
 }
 
-// 更新按钮状态
+// Update button states
 function updateButtonStates() {
   const currentTheme = getCurrentTheme();
 
@@ -99,7 +99,7 @@ function updateButtonStates() {
   });
 }
 
-// 添加系统主题变化监听
+// Add system theme change listener
 function setupSystemThemeListener() {
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -111,7 +111,7 @@ function setupSystemThemeListener() {
   });
 }
 
-// 初始化
+// Initialize
 function initialize() {
   const currentTheme = getCurrentTheme();
   applyTheme(currentTheme);
@@ -119,23 +119,23 @@ function initialize() {
   setupSystemThemeListener();
 }
 
-// 页面加载后初始化
+// Initialize after page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initialize);
 } else {
   initialize();
 }
 
-// 为按钮添加点击事件
+// Add click event to buttons
 document.querySelectorAll('[data-theme-value]').forEach((button) => {
   button.addEventListener('click', () => {
     const themeValue = button.getAttribute('data-theme-value');
 
-    // 应用并保存主题变更
+    // Apply and save theme change
     applyTheme(themeValue || 'system');
     updateButtonStates();
 
-    // 触发自定义事件
+    // Trigger custom event
     button.dispatchEvent(
       new CustomEvent('theme-selected', {
         detail: { value: themeValue },

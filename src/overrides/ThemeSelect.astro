@@ -110,10 +110,10 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     function loadSavedColorTheme() {
       try {
         const savedTheme = localStorage.getItem('destyler-color-theme');
-        // 直接使用保存的主题或默认值
+        // Use saved theme or default value
         const colorTheme = savedTheme || 'zinc';
 
-        // 移除所有颜色主题类
+        // Remove all color theme classes
         const htmlClasses = document.documentElement.classList;
         for (let i = 0; i < htmlClasses.length; i++) {
           const cls = htmlClasses[i];
@@ -122,7 +122,7 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
           }
         }
 
-        // 应用保存的主题
+        // Apply saved theme
         document.documentElement.classList.add(`theme-${colorTheme}`);
         return colorTheme;
       } catch (e) {
@@ -135,10 +135,10 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     function loadSavedRadius() {
       try {
         const savedRadius = localStorage.getItem('destyler-radius');
-        // 直接使用保存的圆角或默认值
+        // Use saved radius or default value
         const radius = savedRadius || '0.5';
 
-        // 应用保存的圆角
+        // Apply saved radius
         document.documentElement.style.setProperty('--radius', `${radius}rem`);
         return radius;
       } catch (e) {
@@ -148,76 +148,76 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
       }
     }
 
-    // 加载亮色/暗色模式设置
+    // Load light/dark mode settings
     function loadSavedAppearance() {
       try {
         const savedTheme = localStorage.getItem('theme');
-        // 如果有保存的主题设置，直接使用
+        // If there's a saved theme setting, use it directly
         if (savedTheme) {
-          // 应用主题设置
+          // Apply theme setting
           applyAppearanceTheme(savedTheme);
           return savedTheme;
         }
 
-        // 如果没有，则检查系统偏好
+        // If not, check system preference
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const defaultTheme = systemPrefersDark ? 'dark' : 'light';
 
-        // 应用默认主题
+        // Apply default theme
         applyAppearanceTheme('system');
         return 'system';
       } catch (e) {
         console.error("Error loading saved appearance:", e);
-        // 默认使用亮色模式
+        // Default to light mode
         applyAppearanceTheme('light');
         return 'light';
       }
     }
 
-    // 应用亮色/暗色模式
+    // Apply light/dark mode
     function applyAppearanceTheme(theme) {
-      // 移除现有的主题类
+      // Remove existing theme classes
       document.documentElement.classList.remove('light', 'dark');
 
       let appliedTheme = theme;
       if (theme === 'system') {
-        // 如果是系统主题，检查系统偏好
+        // For system theme, check system preference
         const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.classList.add(systemTheme);
         appliedTheme = systemTheme;
       } else {
-        // 直接应用指定主题
+        // Apply specified theme directly
         document.documentElement.classList.add(theme);
         appliedTheme = theme;
       }
 
-      // 同步更新 data-theme 属性
+      // Sync update data-theme attribute
       document.documentElement.setAttribute('data-theme', appliedTheme);
 
-      // 保存到localStorage
+      // Save to localStorage
       localStorage.setItem('theme', theme);
       return theme;
     }
 
-    // 确保在页面很早时就应用主题和圆角
+    // Ensure theme and radius are applied early in page load
     const currentColorTheme = loadSavedColorTheme();
     const currentRadius = loadSavedRadius();
     const currentAppearance = loadSavedAppearance();
 
-    // 设置系统主题变化监听器
+    // Set up system theme change listener
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', (e) => {
-      // 只有当用户选择了"system"主题时才自动切换
+      // Only auto-switch when user has selected "system" theme
       if (localStorage.getItem('theme') === 'system') {
         const newTheme = e.matches ? 'dark' : 'light';
         document.documentElement.classList.remove('light', 'dark');
         document.documentElement.classList.add(newTheme);
-        // 同步更新 data-theme 属性
+        // Sync update data-theme attribute
         document.documentElement.setAttribute('data-theme', newTheme);
       }
     });
 
-    // 给全局对象添加主题管理方法，方便其他脚本调用
+    // Add theme management methods to global object for other scripts
     window.StarlightThemeManager = window.StarlightThemeManager || {};
     window.StarlightThemeManager.getCurrentColorTheme = function() {
       return currentColorTheme;
@@ -232,7 +232,7 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
       return applyAppearanceTheme(theme);
     };
 
-    // 调用Starlight的主题更新
+    // Call Starlight's theme update
     if (window.StarlightThemeProvider) {
       StarlightThemeProvider.updatePickers();
     }
@@ -249,37 +249,37 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     appearance: 'theme'
   }
 
-  /** 解析颜色主题，允许任何字符串值 */
+  /** Parse color theme, allow any string value */
   function parseColorTheme(theme: unknown): string {
     return typeof theme === 'string' && theme ? theme : 'zinc'
   }
 
-  /** 加载主题偏好 */
+  /** Load theme preferences */
   function loadColorTheme(): string {
     return parseColorTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.color))
   }
 
-  /** 保存主题偏好 */
+  /** Save theme preferences */
   function storeColorTheme(theme: string): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(storageKey.color, theme)
     }
   }
 
-  /** 更新颜色主题 */
+  /** Update color theme */
   function onColorThemeChange(theme: string): void {
-    // 移除所有当前颜色主题类
+    // Remove all current color theme classes
     document.documentElement.classList.forEach((cls) => {
       if (cls.startsWith('theme-')) {
         document.documentElement.classList.remove(cls)
       }
     })
 
-    // 添加新的颜色主题类
+    // Add new color theme class
     document.documentElement.classList.add(`theme-${theme}`)
     storeColorTheme(theme)
 
-    // 更新当前活动选项的样式
+    // Update the style of the currently active option
     const options = document.querySelectorAll('.color-option')
     options.forEach((option) => {
       if (option.getAttribute('data-color-value') === theme) {
@@ -291,32 +291,32 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     })
   }
 
-  /** 解析圆角主题，允许任何数值 */
+  /** Parse radius theme, allow any numeric value */
   function parseRadiusTheme(radius: unknown): string {
     if (typeof radius === 'string' && radius) {
       return radius;
     }
-    return '0.5'; // 默认值
+    return '0.5'; // Default value
   }
 
-  /** 加载圆角偏好 */
+  /** Load radius preferences */
   function loadRadiusTheme(): string {
     return parseRadiusTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.radius));
   }
 
-  /** 保存圆角偏好 */
+  /** Save radius preferences */
   function storeRadiusTheme(radius: string): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(storageKey.radius, radius);
     }
   }
 
-  /** 更新圆角 */
+  /** Update radius */
   function onRadiusThemeChange(radius: string): void {
     document.documentElement.style.setProperty('--radius', `${radius}rem`);
     storeRadiusTheme(radius);
 
-    // 更新当前活动选项的样式
+    // Update the style of the currently active option
     const options = document.querySelectorAll('.radius-option');
     options.forEach((option) => {
       if (option.getAttribute('data-radius-value') === radius) {
@@ -328,38 +328,38 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     });
   }
 
-  /** 应用亮暗模式主题 */
+  /** Apply light/dark mode theme */
   function applyAppearanceTheme(theme: string): void {
-    // 移除现有的主题类
+    // Remove existing theme classes
     document.documentElement.classList.remove('light', 'dark');
 
     let appliedTheme = theme;
     if (theme === 'system') {
-      // 检测系统主题偏好
+      // Check system theme preference
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.documentElement.classList.add(systemTheme);
       appliedTheme = systemTheme;
     } else {
-      // 直接应用指定主题
+      // Apply specified theme directly
       document.documentElement.classList.add(theme);
       appliedTheme = theme;
     }
 
-    // 同步更新 data-theme 属性
+    // Sync update data-theme attribute
     document.documentElement.setAttribute('data-theme', appliedTheme);
 
-    // 保存到localStorage
+    // Save to localStorage
     try {
       localStorage.setItem('theme', theme);
     } catch (e) {
       console.warn('Failed to save theme preference:', e);
     }
 
-    // 更新按钮状态
+    // Update button state
     updateAppearanceButtonState();
   }
 
-  /** 更新亮暗主题按钮状态 */
+  /** Update light/dark theme button state */
   function updateAppearanceButtonState(): void {
     const currentTheme = localStorage.getItem('theme') || 'system';
 
@@ -378,27 +378,27 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     class ThemeDestylerSelect extends HTMLElement {
       constructor() {
         super()
-        // 初始化主题设置
+        // Initialize theme settings
         const currentColorTheme = loadColorTheme()
         onColorThemeChange(currentColorTheme)
 
-        // 初始化圆角设置
+        // Initialize radius settings
         const currentRadiusTheme = loadRadiusTheme()
         onRadiusThemeChange(currentRadiusTheme)
 
-        // 元素引用
+        // Element references
         const button = this.querySelector('.theme-toggle')
         const popover = this.querySelector('.theme-popover')
 
-        // 添加重置按钮功能
+        // Add reset button functionality
         const resetButton = this.querySelector('.popover-reset')!.closest('button')
         resetButton?.addEventListener('click', () => {
-          // 重置颜色主题到默认值
+          // Reset color theme to default value
           onColorThemeChange('zinc')
-          // 重置圆角到默认值 0.5
+          // Reset radius to default value 0.5
           onRadiusThemeChange('0.5')
 
-          // 手动触发一个 radius-selected 事件来更新 UI
+          // Manually trigger a radius-selected event to update UI
           const event = new CustomEvent('radius-selected', {
             detail: { value: '0.5' },
             bubbles: true
@@ -406,48 +406,48 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
           this.dispatchEvent(event)
         })
 
-        // 添加关闭按钮功能
+        // Add close button functionality
         const closeButton = this.querySelector('.popover-close')!.closest('button')
         closeButton?.addEventListener('click', () => {
           popover?.classList.remove('visible')
           button?.setAttribute('aria-expanded', 'false')
         })
 
-        // 切换弹出菜单显示
+        // Toggle popover visibility
         button?.addEventListener('click', (e) => {
           e.stopPropagation()
           popover?.classList.toggle('visible')
           const expanded = popover?.classList.contains('visible')
           button.setAttribute('aria-expanded', expanded ? 'true' : 'false')
 
-          // 打开菜单时更新亮暗主题按钮状态
+          // Update light/dark theme button state when menu is opened
           if (expanded) {
             updateAppearanceButtonState()
           }
         })
 
-        // 监听颜色选择事件（由 ColorPickPill 组件触发）
+        // Listen for color selection events (triggered by ColorPickPill component)
         this.addEventListener('color-selected', (e:any) => {
           console.log('Color selected:', e)
           const colorValue = e.detail.value
           onColorThemeChange(colorValue)
         })
 
-        // 监听圆角选择事件（由 RadiusPill 组件触发）
+        // Listen for radius selection events (triggered by RadiusPill component)
         this.addEventListener('radius-selected', (e:any) => {
           console.log('Radius selected:', e);
           const radiusValue = e.detail.value;
           onRadiusThemeChange(radiusValue);
         });
 
-        // 监听亮暗主题选择事件（由 ColorAppearance 组件触发）
+        // Listen for light/dark theme selection events (triggered by ColorAppearance component)
         this.addEventListener('theme-selected', (e:any) => {
           console.log('Theme appearance selected:', e);
           const themeValue = e.detail.value;
           applyAppearanceTheme(themeValue);
         });
 
-        // 点击外部区域关闭菜单
+        // Close menu when clicking outside
         document.addEventListener('click', (event) => {
           if (!this.contains(event.target as Node)) {
             popover?.classList.remove('visible')
@@ -455,7 +455,7 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
           }
         })
 
-        // 初始化时更新一次亮暗主题按钮状态
+        // Update light/dark theme button state once on initialization
         setTimeout(() => {
           updateAppearanceButtonState()
         }, 0)

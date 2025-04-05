@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { color, selected } = Astro.props
-// 在 SSR 时无法确定当前选中的颜色，我们将在客户端脚本中处理
+// Cannot determine the selected color during SSR, will handle in client-side script
 const isSelected = color.name === selected;
 ---
 
@@ -37,7 +37,7 @@ const isSelected = color.name === selected;
 </button>
 
 <script>
-// 初始化时设置颜色和选中状态
+// Initialize color and selected state settings
 function updateColorHexes() {
   const isDark = document.documentElement.classList.contains('dark')
   document.querySelectorAll('[data-color-pill]').forEach((pill) => {
@@ -51,10 +51,10 @@ function updateColorHexes() {
   })
 }
 
-// 获取当前主题色
+// Get current theme color
 function getCurrentColorTheme() {
   const htmlClasses = document.documentElement.classList
-  let currentTheme = 'zinc' // 默认值
+  let currentTheme = 'zinc' // Default value
 
   htmlClasses.forEach((cls) => {
     if (cls.startsWith('theme-')) {
@@ -65,7 +65,7 @@ function getCurrentColorTheme() {
   return currentTheme
 }
 
-// 更新所有颜色选项的选中状态
+// Update selected state of all color options
 function updateSelectedState() {
   const currentTheme = getCurrentColorTheme()
   document.querySelectorAll('.color-option').forEach((button) => {
@@ -85,13 +85,13 @@ function updateSelectedState() {
   })
 }
 
-// 初始化
+// Initialize
 function initialize() {
   updateColorHexes()
   updateSelectedState()
 }
 
-// 页面加载后初始化
+// Initialize after page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initialize)
 }
@@ -99,7 +99,7 @@ else {
   initialize()
 }
 
-// 监听主题变化以更新颜色和选中状态
+// Listen for theme changes to update colors and selected state
 const observer = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (
@@ -114,39 +114,39 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.documentElement, { attributes: true })
 
-// 为按钮添加点击事件
+// Add click event for buttons
 document.querySelectorAll('[data-color-value]').forEach((button) => {
   button.addEventListener('click', () => {
     const colorValue = button.getAttribute('data-color-value')
 
-    // 强制立即保存到localStorage并更新DOM
+    // Force immediate save to localStorage and update DOM
     const forceUpdateTheme = (theme: string | null) => {
-      // 移除所有当前颜色主题类
+      // Remove all current color theme classes
       document.documentElement.classList.forEach((cls) => {
         if (cls.startsWith('theme-')) {
           document.documentElement.classList.remove(cls)
         }
       })
 
-      // 添加新的颜色主题类
+      // Add new color theme class
       document.documentElement.classList.add(`theme-${theme}`)
 
-      // 立即保存到localStorage - 注意使用正确的键名
+      // Immediately save to localStorage - use correct key name
       try {
         localStorage.setItem('destyler-color-theme', theme || 'zinc')
       }
       catch (e) {
-        console.warn('无法保存颜色主题到localStorage:', e)
+        console.warn('Failed to save color theme to localStorage:', e)
       }
 
-      // 更新UI状态
+      // Update UI state
       updateSelectedState()
-    };
+    }
 
-    // 应用并保存颜色变更
+    // Apply and save color change
     forceUpdateTheme(colorValue)
 
-    // 触发自定义事件，以便父组件可以监听
+    // Trigger custom event for parent component to listen
     button.dispatchEvent(
       new CustomEvent('color-selected', {
         detail: { value: colorValue },

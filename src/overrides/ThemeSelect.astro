@@ -4,7 +4,7 @@ import RadiusPill from '../components/RadiusPill.astro'
 
 import { colors } from '../unocss/theme'
 
-const RADII = [0, 0.25, 0.5, 0.75, 1]
+const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
 ---
 
 <destyler-theme-destyler-select>
@@ -20,7 +20,7 @@ const RADII = [0, 0.25, 0.5, 0.75, 1]
     <span class="sr-only">Toggle Theme</span>
   </button>
 
-  <div class="theme-popover absolute top-full right-0 mt-2 opacity-0 invisible translate-y-[-0.5rem] transition-all duration-200 z-50 w-80">
+  <div class="theme-popover absolute top-80% right-0 opacity-0 invisible translate-y-[-0.5rem] transition-all duration-200 z-50 w-80">
     <div
       class="
       rounded-md border border-solid border-border p-0 shadow-md
@@ -91,13 +91,13 @@ const RADII = [0, 0.25, 0.5, 0.75, 1]
   .color-option.active span {
     --at-apply: ring-2 ring-foreground;
   }
-  
+
   .radius-option.active span {
     --at-apply: ring-2 ring-foreground;
   }
 </style>
 
-{/* Inlined to avoid FOUC. Uses global scope from `ThemeProvider.astro` */}
+{/* Inlined to avoid focus. Uses global scope from `ThemeProvider.astro` */}
 <script is:inline>
   (function() {
     function loadSavedColorTheme() {
@@ -130,7 +130,7 @@ const RADII = [0, 0.25, 0.5, 0.75, 1]
         const savedRadius = localStorage.getItem('destyler-radius');
         // 直接使用保存的圆角或默认值
         const radius = savedRadius || '0.5';
-        
+
         // 应用保存的圆角
         document.documentElement.style.setProperty('--radius', `${radius}rem`);
         return radius;
@@ -257,7 +257,7 @@ const RADII = [0, 0.25, 0.5, 0.75, 1]
         // 初始化主题设置
         const currentColorTheme = loadColorTheme()
         onColorThemeChange(currentColorTheme)
-        
+
         // 初始化圆角设置
         const currentRadiusTheme = loadRadiusTheme()
         onRadiusThemeChange(currentRadiusTheme)

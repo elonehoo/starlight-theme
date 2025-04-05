@@ -57,10 +57,10 @@ function updateSelectedState() {
   const currentRadius = getCurrentRadius();
 
   document.querySelectorAll('.radius-option').forEach((button) => {
-    const radiusValue = parseFloat(button.getAttribute('data-radius-value') || '0');
-
-    // 使用严格相等而不是浮点数比较，避免0和0.5被混淆
-    const isSelected = radiusValue === currentRadius;
+    const radiusValue = button.getAttribute('data-radius-value');
+    
+    // 转换为字符串进行比较，避免类型不匹配问题
+    const isSelected = radiusValue === currentRadius.toString();
 
     if (isSelected) {
       button.classList.add('active');
@@ -123,5 +123,13 @@ document.querySelectorAll('[data-radius-value]').forEach((button) => {
       }),
     );
   });
+});
+
+// 添加全局事件监听器来响应重置事件
+document.addEventListener('radius-selected', () => {
+  // 确保在下一个微任务中更新状态，避免时序问题
+  setTimeout(() => {
+    updateSelectedState();
+  }, 0);
 });
 </script>

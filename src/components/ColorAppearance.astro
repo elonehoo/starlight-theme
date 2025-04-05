@@ -132,7 +132,7 @@ document.querySelectorAll('[data-theme-value]').forEach((button) => {
     const themeValue = button.getAttribute('data-theme-value');
 
     // 应用并保存主题变更
-    applyTheme(themeValue);
+    applyTheme(themeValue || 'system');
     updateButtonStates();
 
     // 触发自定义事件

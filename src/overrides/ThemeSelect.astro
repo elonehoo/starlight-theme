@@ -393,9 +393,17 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
         // 添加重置按钮功能
         const resetButton = this.querySelector('.popover-reset')!.closest('button')
         resetButton?.addEventListener('click', () => {
+          // 重置颜色主题到默认值
           onColorThemeChange('zinc')
-          // 重置亮暗主题到系统默认
-          applyAppearanceTheme('system')
+          // 重置圆角到默认值 0.5
+          onRadiusThemeChange('0.5')
+
+          // 手动触发一个 radius-selected 事件来更新 UI
+          const event = new CustomEvent('radius-selected', {
+            detail: { value: '0.5' },
+            bubbles: true
+          })
+          this.dispatchEvent(event)
         })
 
         // 添加关闭按钮功能

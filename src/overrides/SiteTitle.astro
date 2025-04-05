@@ -45,9 +45,6 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute
 
   .title-text {
     --at-apply: font-700 hidden text-3;
-    font-weight: 700;
-    display: none;
-    font-size: 0.75rem;
     white-space: nowrap;
     overflow: hidden;
     color: hsl(var(--foreground)) !important;
@@ -55,37 +52,32 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute
 
   @media (min-width: 480px) {
     .site-title {
-      gap: 0.375rem;
-      margin-right: 0.75rem;
+      --at-apply: gap-1.5 mr-3;
     }
 
     .title-text {
-      font-size: 0.85rem;
-      display: inline-block;
+      --at-apply: text-[0.85rem] inline-block;
     }
   }
 
   @media (min-width: 640px) {
     .site-title {
-      gap: 0.5rem;
-      margin-right: 1rem;
+      --at-apply: gap-2 mr-4;
     }
 
     .title-text {
-      font-size: 0.9rem;
-      max-width: 150px;
+      --at-apply: text-[0.9rem] max-w-[150px];
 
     }
   }
 
   @media (min-width: 1024px) {
     .site-title {
-      margin-right: 1.5rem;
+      --at-apply: mr-6;
     }
 
     .title-text {
-      font-size: 1rem;
-      max-width: none;
+      --at-apply: text-4 max-w-none;
     }
   }
 

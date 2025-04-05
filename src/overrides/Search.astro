@@ -32,12 +32,12 @@ dataAttributes['data-strip-trailing-slash'] = ''
       </button>
       {
         import.meta.env.DEV
-? (
+        ? (
           <div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr">
             <p>{Astro.locals.t('search.devWarning')}</p>
           </div>
         )
-: (
+        : (
           <div class="search-container">
             <div id="starlight__search" />
           </div>

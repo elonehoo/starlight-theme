@@ -1,0 +1,19 @@
+---
+interface Props {
+  orientation?: 'horizontal' | 'vertical'
+}
+
+const { orientation = 'horizontal' } = Astro.props
+---
+
+<div
+  data-scope="separator"
+  data-part="root"
+  role="separator"
+  aria-orientation={orientation}
+  data-orientation={orientation}
+  id="separator::r3:"
+  class="bg-op-20 dark:bg-op-20 bg-dark dark:bg-light data-[orientation=horizontal]:h-px
+  data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full
+  data-[orientation=vertical]:w-px my-3 my-12!"
+></div>

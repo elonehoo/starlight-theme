@@ -1,157 +1,92 @@
 .sl-markdown-content h1:not(:where(.not-content *)) {
-  letter-spacing: -0.025em;
-  font-weight: 800;
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-  scroll-margin: 5rem;
-  margin: 0;
+  --at-apply: -tracking-wide font-extrabold text-4xl leading-10 m-0 scroll-m-20;
 }
 
 @media (min-width: 1024px) {
   .sl-markdown-content h1:not(:where(.not-content *)) {
-    font-size: 3rem;
-    line-height: 1;
+    --at-apply: text-5xl leading-none;
   }
 }
 
 .sl-markdown-content h2:not(:where(.not-content *)) {
-  letter-spacing: -0.025em;
-  font-weight: 600;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  padding-bottom: 0.5rem;
-  border-bottom-width: 1px;
-  scroll-margin: 5rem;
-  margin: 0;
+  --at-apply: -tracking-wide font-semibold text-3xl leading-9 m-0 pb-2 scroll-m-20 border-b;
 }
 
 .sl-markdown-content h2:not(:where(.not-content *)):first-child {
-  margin-top: 0;
+  --at-apply: mt-0;
 }
 
 .sl-markdown-content h3:not(:where(.not-content *)) {
-  letter-spacing: -0.025em;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 2rem;
-  scroll-margin: 5rem;
-  margin: 0;
+  --at-apply: -tracking-wide font-semibold text-2xl leading-8 m-0 scroll-m-20;
 }
 
 .sl-markdown-content h4:not(:where(.not-content *)) {
-  letter-spacing: -0.025em;
-  font-weight: 600;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  scroll-margin: 5rem;
-  margin: 0;
+  --at-apply: -tracking-wide font-semibold text-xl leading-7 m-0 scroll-m-20;
 }
 
 .sl-markdown-content p:not(:where(.not-content *)):not(li p) {
-  line-height: 1.75rem;
-}
-
-.sl-markdown-content p:first-child:not(:where(.not-content *)):not(li p) {
-  margin-top: 1.5rem;
+  --at-apply: leading-7 first:mt-6;
 }
 
 .sl-markdown-content blockquote:not(:where(.not-content *)) {
-  font-style: italic;
-  padding-left: 1.5rem;
-  border-left-width: 2px;
+  --at-apply: italic mt-6 m-0 pl-6 border-l-2;
   border-left-style: solid;
-  margin-top: 1.5rem;
-  margin: 0;
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) {
-  width: 100%;
-  text-indent: 0;
-  border-color: inherit;
-  border-collapse: collapse;
+  --at-apply: w-full indent-[0] border-inherit border-collapse;
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) > thead > tr {
-  padding: 0;
-  border-top-width: 1px;
+  --at-apply: m-0 p-0 border-t;
   border-top-style: solid;
-  margin: 0;
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) > thead > tr > th {
-  font-weight: 700;
-  padding-top: 0.5rem;
-  text-align: left;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-width: 1px;
-  border-style: solid;
+  --at-apply: font-bold text-left border px-4 py-2 border-solid;
 }
 
-.sl-markdown-content table:not(:where(.not-content *)) > thead > tr > th[align='right'] {
-  text-align: right;
+.sl-markdown-content table:not(:where(.not-content *)) > thead > tr > th[align="right"] {
+  --at-apply: text-right;
 }
 
-.sl-markdown-content table:not(:where(.not-content *)) > thead > tr > th[align='center'] {
-  text-align: center;
+.sl-markdown-content table:not(:where(.not-content *)) > thead > tr > th[align="center"] {
+  --at-apply: text-center;
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) > tbody > tr {
-  margin: 0;
-  border-top-width: 1px;
-  padding: 0;
+  --at-apply: m-0 p-0 border-t;
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) > tbody > tr:nth-child(even) {
-  background-color: hsl(var(--muted));
+  --at-apply: bg-[hsl(var(--muted))];
 }
 
 .sl-markdown-content table:not(:where(.not-content *)) > tbody > tr > td {
-  text-align: left;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-width: 1px;
-  border-style: solid;
+  --at-apply: text-left border px-4 py-2 border-solid;
 }
 
-.sl-markdown-content table:not(:where(.not-content *)) > tbody > tr > td[align='right'] {
-  text-align: right;
+.sl-markdown-content table:not(:where(.not-content *)) > tbody > tr > td[align="right"] {
+  --at-apply: text-right;
 }
 
-.sl-markdown-content table:not(:where(.not-content *)) > tbody > tr > td[align='center'] {
-  text-align: center;
+.sl-markdown-content table:not(:where(.not-content *)) > tbody > tr > td[align="center"] {
+  --at-apply: text-center;
 }
 
 .sl-markdown-content ul:not(:where(.not-content *)) {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  margin-left: 1.5rem;
-  list-style-type: disc;
+  --at-apply: list-disc ml-6 my-6;
 }
 
 .sl-markdown-content ul:not(:where(.not-content *)) > li {
-  margin-top: 0.5rem;
+  --at-apply: mt-2;
 }
 
 .sl-markdown-content code:not(:where(.not-content *)) {
-  position: relative;
-  border-radius: 0.25rem;
-  background-color: hsl(var(--muted));
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+  --at-apply: relative rounded bg-[hsl(var(--muted))] text-sm font-semibold px-[0.3rem] py-[0.2rem];
   font-family: var(--sl-font-mono), monospace;
-  font-size: 0.875rem;
-  font-weight: 600;
 }
 
 .sl-markdown-content a:not(:where(.not-content *)) {
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  color: inherit;
+  --at-apply: font-medium underline underline-offset-4 text-inherit;
 }

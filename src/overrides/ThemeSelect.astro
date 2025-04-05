@@ -1,6 +1,7 @@
 ---
 import ColorPickPill from '../components/ColorPickPill.astro'
 import RadiusPill from '../components/RadiusPill.astro'
+import ColorAppearance from '../components/ColorAppearance.astro'
 
 import { colors } from '../unocss/theme'
 
@@ -74,6 +75,13 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
             )) }
           </div>
         </div>
+        <!-- theme -->
+        <div class="space-y-1.5 pt-6">
+          <label for="theme" class="text-xs"> Theme </label>
+          <div class="flex space-x-2 py-1.5">
+            <ColorAppearance />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -97,7 +105,6 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
   }
 </style>
 
-{/* Inlined to avoid focus. Uses global scope from `ThemeProvider.astro` */}
 <script is:inline>
   (function() {
     function loadSavedColorTheme() {
@@ -141,9 +148,74 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
       }
     }
 
+    // 加载亮色/暗色模式设置
+    function loadSavedAppearance() {
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        // 如果有保存的主题设置，直接使用
+        if (savedTheme) {
+          // 应用主题设置
+          applyAppearanceTheme(savedTheme);
+          return savedTheme;
+        }
+
+        // 如果没有，则检查系统偏好
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const defaultTheme = systemPrefersDark ? 'dark' : 'light';
+
+        // 应用默认主题
+        applyAppearanceTheme('system');
+        return 'system';
+      } catch (e) {
+        console.error("Error loading saved appearance:", e);
+        // 默认使用亮色模式
+        applyAppearanceTheme('light');
+        return 'light';
+      }
+    }
+
+    // 应用亮色/暗色模式
+    function applyAppearanceTheme(theme) {
+      // 移除现有的主题类
+      document.documentElement.classList.remove('light', 'dark');
+
+      let appliedTheme = theme;
+      if (theme === 'system') {
+        // 如果是系统主题，检查系统偏好
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.classList.add(systemTheme);
+        appliedTheme = systemTheme;
+      } else {
+        // 直接应用指定主题
+        document.documentElement.classList.add(theme);
+        appliedTheme = theme;
+      }
+
+      // 同步更新 data-theme 属性
+      document.documentElement.setAttribute('data-theme', appliedTheme);
+
+      // 保存到localStorage
+      localStorage.setItem('theme', theme);
+      return theme;
+    }
+
     // 确保在页面很早时就应用主题和圆角
     const currentColorTheme = loadSavedColorTheme();
     const currentRadius = loadSavedRadius();
+    const currentAppearance = loadSavedAppearance();
+
+    // 设置系统主题变化监听器
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', (e) => {
+      // 只有当用户选择了"system"主题时才自动切换
+      if (localStorage.getItem('theme') === 'system') {
+        const newTheme = e.matches ? 'dark' : 'light';
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(newTheme);
+        // 同步更新 data-theme 属性
+        document.documentElement.setAttribute('data-theme', newTheme);
+      }
+    });
 
     // 给全局对象添加主题管理方法，方便其他脚本调用
     window.StarlightThemeManager = window.StarlightThemeManager || {};
@@ -152,6 +224,12 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     };
     window.StarlightThemeManager.getCurrentRadius = function() {
       return currentRadius;
+    };
+    window.StarlightThemeManager.getCurrentAppearance = function() {
+      return currentAppearance;
+    };
+    window.StarlightThemeManager.setAppearance = function(theme) {
+      return applyAppearanceTheme(theme);
     };
 
     // 调用Starlight的主题更新
@@ -167,7 +245,8 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
   /** Key in `localStorage` to store preferences at. */
   const storageKey = {
     color: 'destyler-color-theme',
-    radius: 'destyler-radius'
+    radius: 'destyler-radius',
+    appearance: 'theme'
   }
 
   /** 解析颜色主题，允许任何字符串值 */
@@ -249,6 +328,51 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
     });
   }
 
+  /** 应用亮暗模式主题 */
+  function applyAppearanceTheme(theme: string): void {
+    // 移除现有的主题类
+    document.documentElement.classList.remove('light', 'dark');
+
+    let appliedTheme = theme;
+    if (theme === 'system') {
+      // 检测系统主题偏好
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.classList.add(systemTheme);
+      appliedTheme = systemTheme;
+    } else {
+      // 直接应用指定主题
+      document.documentElement.classList.add(theme);
+      appliedTheme = theme;
+    }
+
+    // 同步更新 data-theme 属性
+    document.documentElement.setAttribute('data-theme', appliedTheme);
+
+    // 保存到localStorage
+    try {
+      localStorage.setItem('theme', theme);
+    } catch (e) {
+      console.warn('Failed to save theme preference:', e);
+    }
+
+    // 更新按钮状态
+    updateAppearanceButtonState();
+  }
+
+  /** 更新亮暗主题按钮状态 */
+  function updateAppearanceButtonState(): void {
+    const currentTheme = localStorage.getItem('theme') || 'system';
+
+    document.querySelectorAll('[data-theme-value]').forEach((button) => {
+      const themeValue = button.getAttribute('data-theme-value');
+      if (themeValue === currentTheme) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+
   customElements.define(
     'destyler-theme-destyler-select',
     class ThemeDestylerSelect extends HTMLElement {
@@ -270,6 +394,8 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
         const resetButton = this.querySelector('.popover-reset')!.closest('button')
         resetButton?.addEventListener('click', () => {
           onColorThemeChange('zinc')
+          // 重置亮暗主题到系统默认
+          applyAppearanceTheme('system')
         })
 
         // 添加关闭按钮功能
@@ -285,6 +411,11 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
           popover?.classList.toggle('visible')
           const expanded = popover?.classList.contains('visible')
           button.setAttribute('aria-expanded', expanded ? 'true' : 'false')
+
+          // 打开菜单时更新亮暗主题按钮状态
+          if (expanded) {
+            updateAppearanceButtonState()
+          }
         })
 
         // 监听颜色选择事件（由 ColorPickPill 组件触发）
@@ -301,6 +432,13 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
           onRadiusThemeChange(radiusValue);
         });
 
+        // 监听亮暗主题选择事件（由 ColorAppearance 组件触发）
+        this.addEventListener('theme-selected', (e:any) => {
+          console.log('Theme appearance selected:', e);
+          const themeValue = e.detail.value;
+          applyAppearanceTheme(themeValue);
+        });
+
         // 点击外部区域关闭菜单
         document.addEventListener('click', (event) => {
           if (!this.contains(event.target as Node)) {
@@ -308,6 +446,11 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
             button?.setAttribute('aria-expanded', 'false')
           }
         })
+
+        // 初始化时更新一次亮暗主题按钮状态
+        setTimeout(() => {
+          updateAppearanceButtonState()
+        }, 0)
       }
     },
   )

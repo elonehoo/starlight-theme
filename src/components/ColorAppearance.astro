@@ -1,0 +1,147 @@
+---
+interface Props {
+  selected?: string;
+}
+
+const { selected } = Astro.props;
+
+const themeOptions = [
+  { value: 'light', label: 'Light', icon: 'i-carbon:sun' },
+  { value: 'dark', label: 'Dark', icon: 'i-carbon:moon' },
+  { value: 'system', label: 'System', icon: 'i-carbon:screen' },
+];
+---
+
+<div class="flex gap-2">
+  {themeOptions.map((option) => (
+    <button
+      class:list={[
+        'inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+        'disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm',
+        'hover:bg-accent hover:text-accent-foreground py-2 h-8 justify-start px-3 theme-option',
+        option.value === selected ? 'active border-foreground border-2' : 'border-input',
+      ]}
+      data-theme-value={option.value}
+    >
+      <span class={`${option.icon} mr-1 h-4 w-4`}></span>
+      <span class="text-xs">{option.label}</span>
+    </button>
+  ))}
+</div>
+
+<script>
+// 获取当前主题模式设置
+function getCurrentTheme() {
+  try {
+    // 首先尝试从localStorage获取
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme;
+    }
+
+    // 如果没有存储的主题，则检查HTML文档类来判断当前主题
+    if (document.documentElement.classList.contains('dark')) {
+      return 'dark';
+    }
+    else if (document.documentElement.classList.contains('light')) {
+      return 'light';
+    }
+
+    // 默认返回系统主题
+    return 'system';
+  } catch (e) {
+    return 'system';
+  }
+}
+
+// 应用主题
+function applyTheme(theme: string) {
+  // 移除现有的主题类
+  document.documentElement.classList.remove('light', 'dark');
+
+  if (theme === 'system') {
+    // 检测系统主题偏好
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.classList.add(systemTheme);
+  } else {
+    // 直接应用指定主题
+    document.documentElement.classList.add(theme);
+  }
+
+  // 保存到localStorage
+  try {
+    localStorage.setItem('theme', theme);
+  } catch (e) {
+    console.warn('Failed to save theme preference:', e);
+  }
+}
+
+// 更新按钮状态
+function updateButtonStates() {
+  const currentTheme = getCurrentTheme();
+
+  document.querySelectorAll('[data-theme-value]').forEach((button) => {
+    const themeValue = button.getAttribute('data-theme-value');
+    const isSelected = themeValue === currentTheme;
+
+    if (isSelected) {
+      button.classList.add('active');
+      button.classList.add('border-foreground');
+      button.classList.add('border-2');
+      button.classList.remove('border-input');
+    } else {
+      button.classList.remove('active');
+      button.classList.remove('border-foreground');
+      button.classList.remove('border-2');
+      button.classList.add('border-input');
+    }
+  });
+}
+
+// 添加系统主题变化监听
+function setupSystemThemeListener() {
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+  mediaQuery.addEventListener('change', (e) => {
+    if (getCurrentTheme() === 'system') {
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(e.matches ? 'dark' : 'light');
+    }
+  });
+}
+
+// 初始化
+function initialize() {
+  const currentTheme = getCurrentTheme();
+  applyTheme(currentTheme);
+  updateButtonStates();
+  setupSystemThemeListener();
+}
+
+// 页面加载后初始化
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialize);
+} else {
+  initialize();
+}
+
+// 为按钮添加点击事件
+document.querySelectorAll('[data-theme-value]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const themeValue = button.getAttribute('data-theme-value');
+
+    // 应用并保存主题变更
+    applyTheme(themeValue);
+    updateButtonStates();
+
+    // 触发自定义事件
+    button.dispatchEvent(
+      new CustomEvent('theme-selected', {
+        detail: { value: themeValue },
+        bubbles: true,
+      }),
+    );
+  });
+});
+</script>

@@ -1,0 +1,127 @@
+---
+interface Props {
+  radius: number;
+  selected?: number;
+}
+
+const { radius, selected } = Astro.props;
+// 在 SSR 时无法确定当前选中的半径，会在客户端脚本中处理
+const isSelected = radius === selected;
+---
+
+<button
+  class:list={[
+    'inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors',
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+    'disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm',
+    'hover:bg-accent hover:text-accent-foreground py-2 h-8 justify-start px-2 radius-option',
+    isSelected ? 'active border-foreground border-2' : 'border-input',
+  ]}
+  data-radius-value={radius}
+>
+  <span
+    class="h-4 w-4 bg-primary flex items-center justify-center"
+    style={`border-radius: ${radius}rem;`}
+    data-radius-pill
+  ></span>
+  <span class="ml-2 text-xs mt-px">{radius}</span>
+</button>
+
+<script>
+// 获取当前半径设置
+function getCurrentRadius() {
+  try {
+    // 首先尝试从localStorage获取，因为这是最精确的来源
+    const savedRadius = localStorage.getItem('destyler-radius');
+    if (savedRadius !== null) {
+      return parseFloat(savedRadius);
+    }
+
+    // 如果localStorage中没有，则从CSS变量中获取
+    const radiusVar = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim();
+    if (radiusVar) {
+      const match = radiusVar.match(/^([\d.]+)rem$/);
+      if (match) {
+        return parseFloat(match[1]);
+      }
+    }
+
+    return 0.5;
+  } catch (e) {
+    return 0.5;
+  }
+}
+
+// 更新所有半径选项的选中状态
+function updateSelectedState() {
+  const currentRadius = getCurrentRadius();
+
+  document.querySelectorAll('.radius-option').forEach((button) => {
+    const radiusValue = parseFloat(button.getAttribute('data-radius-value') || '0');
+
+    // 使用严格相等而不是浮点数比较，避免0和0.5被混淆
+    const isSelected = radiusValue === currentRadius;
+
+    if (isSelected) {
+      button.classList.add('active');
+      button.classList.add('border-foreground');
+      button.classList.add('border-2');
+      button.classList.remove('border-input');
+    }
+    else {
+      button.classList.remove('active');
+      button.classList.remove('border-foreground');
+      button.classList.remove('border-2');
+      button.classList.add('border-input');
+    }
+  });
+}
+
+// 初始化
+function initialize() {
+  updateSelectedState();
+}
+
+// 页面加载后初始化
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialize);
+}
+else {
+  initialize();
+}
+
+// 为按钮添加点击事件
+document.querySelectorAll('[data-radius-value]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const radiusValue = parseFloat(button.getAttribute('data-radius-value') || '0');
+
+    // 强制立即更新并保存到localStorage
+    const forceUpdateRadius = (radius:any) => {
+      // 更新CSS变量
+      document.documentElement.style.setProperty('--radius', `${radius}rem`);
+
+      // 保存到localStorage
+      try {
+        localStorage.setItem('destyler-radius', radius.toString());
+      }
+      catch (e) {
+        console.warn(e);
+      }
+
+      // 更新UI状态
+      updateSelectedState();
+    };
+
+    // 应用并保存半径变更
+    forceUpdateRadius(radiusValue);
+
+    // 触发自定义事件，以便父组件可以监听
+    button.dispatchEvent(
+      new CustomEvent('radius-selected', {
+        detail: { value: radiusValue.toString() },
+        bubbles: true,
+      }),
+    );
+  });
+});
+</script>

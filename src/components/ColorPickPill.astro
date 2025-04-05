@@ -1,0 +1,158 @@
+---
+interface Props {
+  color: {
+    name: string
+    label: string
+    activeColor: {
+      light: string
+      dark: string
+    }
+  }
+  selected?: string
+}
+
+const { color, selected } = Astro.props
+// 在 SSR 时无法确定当前选中的颜色，我们将在客户端脚本中处理
+const isSelected = color.name === selected;
+---
+
+<button
+  class:list={[
+    'inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors',
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+    'disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm',
+    'hover:bg-accent hover:text-accent-foreground py-2 h-8 justify-start px-2 color-option',
+    isSelected ? 'active border-foreground border-2' : 'border-input',
+  ]}
+  data-color-value={color.name}
+  data-color-hex-light={color.activeColor.light}
+  data-color-hex-dark={color.activeColor.dark}
+>
+  <span
+    class="h-4 w-4 rounded-full flex items-center justify-center"
+    style="background-color: hsl(var(--color-hex));"
+    data-color-pill
+  ></span>
+  <span class="ml-2 text-xs capitalize mt-px">{color.label}</span>
+</button>
+
+<script>
+// 初始化时设置颜色和选中状态
+function updateColorHexes() {
+  const isDark = document.documentElement.classList.contains('dark')
+  document.querySelectorAll('[data-color-pill]').forEach((pill) => {
+    const button = pill.closest('button')
+    if (button) {
+      const hexLight = button.getAttribute('data-color-hex-light')
+      const hexDark = button.getAttribute('data-color-hex-dark')
+      const hex = isDark ? hexDark : hexLight
+      pill.setAttribute('style', `background-color: hsl(${hex})`)
+    }
+  })
+}
+
+// 获取当前主题色
+function getCurrentColorTheme() {
+  const htmlClasses = document.documentElement.classList
+  let currentTheme = 'zinc' // 默认值
+
+  htmlClasses.forEach((cls) => {
+    if (cls.startsWith('theme-')) {
+      currentTheme = cls.replace('theme-', '')
+    }
+  })
+
+  return currentTheme
+}
+
+// 更新所有颜色选项的选中状态
+function updateSelectedState() {
+  const currentTheme = getCurrentColorTheme()
+  document.querySelectorAll('.color-option').forEach((button) => {
+    const colorValue = button.getAttribute('data-color-value')
+    if (colorValue === currentTheme) {
+      button.classList.add('active')
+      button.classList.add('border-foreground')
+      button.classList.add('border-2')
+      button.classList.remove('border-input')
+    }
+    else {
+      button.classList.remove('active')
+      button.classList.remove('border-foreground')
+      button.classList.remove('border-2')
+      button.classList.add('border-input')
+    }
+  })
+}
+
+// 初始化
+function initialize() {
+  updateColorHexes()
+  updateSelectedState()
+}
+
+// 页面加载后初始化
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialize)
+}
+else {
+  initialize()
+}
+
+// 监听主题变化以更新颜色和选中状态
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (
+      mutation.target === document.documentElement
+      && mutation.attributeName === 'class'
+    ) {
+      updateColorHexes()
+      updateSelectedState()
+    }
+  })
+})
+
+observer.observe(document.documentElement, { attributes: true })
+
+// 为按钮添加点击事件
+document.querySelectorAll('[data-color-value]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const colorValue = button.getAttribute('data-color-value')
+
+    // 强制立即保存到localStorage并更新DOM
+    const forceUpdateTheme = (theme: string | null) => {
+      // 移除所有当前颜色主题类
+      document.documentElement.classList.forEach((cls) => {
+        if (cls.startsWith('theme-')) {
+          document.documentElement.classList.remove(cls)
+        }
+      })
+
+      // 添加新的颜色主题类
+      document.documentElement.classList.add(`theme-${theme}`)
+
+      // 立即保存到localStorage - 注意使用正确的键名
+      try {
+        localStorage.setItem('destyler-color-theme', theme || 'zinc')
+      }
+      catch (e) {
+        console.warn('无法保存颜色主题到localStorage:', e)
+      }
+
+      // 更新UI状态
+      updateSelectedState()
+    };
+
+    // 应用并保存颜色变更
+    forceUpdateTheme(colorValue)
+
+    // 触发自定义事件，以便父组件可以监听
+    button.dispatchEvent(
+      new CustomEvent('color-selected', {
+        detail: { value: colorValue },
+        bubbles: true,
+      }),
+    );
+  })
+})
+</script>

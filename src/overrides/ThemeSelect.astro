@@ -1,142 +1,312 @@
 ---
+import ColorPickPill from '../components/ColorPickPill.astro'
+import RadiusPill from '../components/RadiusPill.astro'
 
+import { colors } from '../unocss/theme'
+
+const RADII = [0, 0.25, 0.5, 0.75, 1]
 ---
 
-<starlight-theme-destyler-select>
+<destyler-theme-destyler-select>
   <button
     aria-label={Astro.locals.t('themeSelect.accessibleLabel')}
-    aria-live="polite"
-    class="sl-flex button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    class="theme-toggle flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors"
     title={Astro.locals.t('themeSelect.accessibleLabel')}
     data-variant="ghost"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="sun"
-    >
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2"></path>
-      <path d="M12 20v2"></path>
-      <path d="m4.93 4.93 1.41 1.41"></path>
-      <path d="m17.66 17.66 1.41 1.41"></path>
-      <path d="M2 12h2"></path>
-      <path d="M20 12h2"></path>
-      <path d="m6.34 17.66-1.41 1.41"></path>
-      <path d="m19.07 4.93-1.41 1.41"></path>
-    </svg>
-
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="moon"
-    ><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"> </path>
-    </svg>
-
-    <span class="sr-only">Toggle theme</span>
+    <div class="size-4 i-carbon:color-palette" />
+    <span class="sr-only">Toggle Theme</span>
   </button>
-</starlight-theme-destyler-select>
+
+  <div class="theme-popover absolute top-full right-0 mt-2 opacity-0 invisible translate-y-[-0.5rem] transition-all duration-200 z-50 w-80">
+    <div
+      class="
+      rounded-md border border-solid border-border p-0 shadow-md
+      bg-card text-card-foreground outline-none relative
+      data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0
+      data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
+      data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2
+      data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2
+      "
+    >
+      <!-- action button -->
+      <div class="absolute top-3 right-3 flex gap-2 z-10">
+        <button class="popover-reset inline-flex items-center justify-center rounded-md w-7 h-7 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          <div class="w-4 h-4 i-carbon:reset" />
+        </button>
+        <button class="popover-close inline-flex items-center justify-center rounded-md w-7 h-7 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          <div class="w-4 h-4 i-carbon:close" />
+        </button>
+      </div>
+
+      <div class="p-4">
+        <!-- title -->
+        <div class="grid space-y-1">
+          <h1 class="text-base font-semibold text-foreground">
+            Customize
+          </h1>
+          <p class="text-xs text-muted-foreground">
+            Pick a style and color for your components.
+          </p>
+        </div>
+
+        <!-- Color -->
+        <div class="space-y-1.5 pt-6">
+          <label for="color" class="text-xs">Color</label>
+          <div class="grid grid-cols-3 gap-2 py-1.5">
+            { colors.map(color => (
+              <ColorPickPill
+                color={color}
+              />
+            )) }
+          </div>
+        </div>
+        <!-- Radius -->
+        <div class="space-y-1.5 pt-6">
+          <label for="color" class="text-xs">Radius</label>
+          <div class="grid grid-cols-3 gap-2 py-1.5">
+            { RADII.map(radius => (
+              <RadiusPill
+                radius={radius}
+              />
+            )) }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</destyler-theme-destyler-select>
 
 <style>
-  svg {
-    flex-shrink: 0;
-    width: 1rem;
-    height: 1rem;
-    pointer-events: none;
+  .theme-popover.visible {
+    --at-apply: op-100 visible translate-y-0;
   }
 
-  :global([data-theme='light']) svg.sun {
-    display: none;
+  .theme-option.active {
+    --at-apply: bg-muted font-medium;
   }
 
-  :global([data-theme='dark']) svg.moon {
-    display: none;
+  .color-option.active span {
+    --at-apply: ring-2 ring-foreground;
+  }
+  
+  .radius-option.active span {
+    --at-apply: ring-2 ring-foreground;
   }
 </style>
 
 {/* Inlined to avoid FOUC. Uses global scope from `ThemeProvider.astro` */}
 <script is:inline>
-  StarlightThemeProvider.updatePickers()
-  document.documentElement.classList.add('theme-zinc')
-  document.documentElement.classList.add('group')
+  (function() {
+    function loadSavedColorTheme() {
+      try {
+        const savedTheme = localStorage.getItem('destyler-color-theme');
+        // 直接使用保存的主题或默认值
+        const colorTheme = savedTheme || 'zinc';
+
+        // 移除所有颜色主题类
+        const htmlClasses = document.documentElement.classList;
+        for (let i = 0; i < htmlClasses.length; i++) {
+          const cls = htmlClasses[i];
+          if (cls && cls.startsWith('theme-')) {
+            document.documentElement.classList.remove(cls);
+          }
+        }
+
+        // 应用保存的主题
+        document.documentElement.classList.add(`theme-${colorTheme}`);
+        return colorTheme;
+      } catch (e) {
+        console.error("Error loading saved color theme:", e);
+        document.documentElement.classList.add('theme-zinc');
+        return 'zinc';
+      }
+    }
+
+    function loadSavedRadius() {
+      try {
+        const savedRadius = localStorage.getItem('destyler-radius');
+        // 直接使用保存的圆角或默认值
+        const radius = savedRadius || '0.5';
+        
+        // 应用保存的圆角
+        document.documentElement.style.setProperty('--radius', `${radius}rem`);
+        return radius;
+      } catch (e) {
+        console.error("Error loading saved radius:", e);
+        document.documentElement.style.setProperty('--radius', '0.5rem');
+        return '0.5';
+      }
+    }
+
+    // 确保在页面很早时就应用主题和圆角
+    const currentColorTheme = loadSavedColorTheme();
+    const currentRadius = loadSavedRadius();
+
+    // 给全局对象添加主题管理方法，方便其他脚本调用
+    window.StarlightThemeManager = window.StarlightThemeManager || {};
+    window.StarlightThemeManager.getCurrentColorTheme = function() {
+      return currentColorTheme;
+    };
+    window.StarlightThemeManager.getCurrentRadius = function() {
+      return currentRadius;
+    };
+
+    // 调用Starlight的主题更新
+    if (window.StarlightThemeProvider) {
+      StarlightThemeProvider.updatePickers();
+    }
+
+    document.documentElement.classList.add('group');
+  })();
 </script>
 
 <script>
-  type Theme = 'auto' | 'dark' | 'light'
-
-  /** Key in `localStorage` to store color theme preference at. */
-  const storageKey = 'starlight-theme'
-
-  /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
-  function parseTheme(theme: unknown): Theme {
-    return theme === 'auto' || theme === 'dark' || theme === 'light' ? theme : 'auto'
+  /** Key in `localStorage` to store preferences at. */
+  const storageKey = {
+    color: 'destyler-color-theme',
+    radius: 'destyler-radius'
   }
 
-  /** Load the user’s preference from `localStorage`. */
-  function loadTheme(): Theme {
-    return parseTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey))
+  /** 解析颜色主题，允许任何字符串值 */
+  function parseColorTheme(theme: unknown): string {
+    return typeof theme === 'string' && theme ? theme : 'zinc'
   }
 
-  /** Store the user’s preference in `localStorage`. */
-  function storeTheme(theme: Theme): void {
+  /** 加载主题偏好 */
+  function loadColorTheme(): string {
+    return parseColorTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.color))
+  }
+
+  /** 保存主题偏好 */
+  function storeColorTheme(theme: string): void {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(storageKey, theme === 'light' || theme === 'dark' ? theme : '')
+      localStorage.setItem(storageKey.color, theme)
     }
   }
 
-  /** Get the preferred system color scheme. */
-  function getPreferredColorScheme(): Theme {
-    return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  /** 更新颜色主题 */
+  function onColorThemeChange(theme: string): void {
+    // 移除所有当前颜色主题类
+    document.documentElement.classList.forEach((cls) => {
+      if (cls.startsWith('theme-')) {
+        document.documentElement.classList.remove(cls)
+      }
+    })
+
+    // 添加新的颜色主题类
+    document.documentElement.classList.add(`theme-${theme}`)
+    storeColorTheme(theme)
+
+    // 更新当前活动选项的样式
+    const options = document.querySelectorAll('.color-option')
+    options.forEach((option) => {
+      if (option.getAttribute('data-color-value') === theme) {
+        option.classList.add('active')
+      }
+      else {
+        option.classList.remove('active')
+      }
+    })
   }
 
-  /** Update select menu UI, document theme, and local storage state. */
-  function onThemeChange(theme: Theme): void {
-    StarlightThemeProvider.updatePickers(theme)
-    const curosr = theme === 'auto' ? getPreferredColorScheme() : theme
-    document.documentElement.dataset.theme = curosr
-    if (curosr === 'dark') {
-      document.documentElement.classList.remove('light')
+  /** 解析圆角主题，允许任何数值 */
+  function parseRadiusTheme(radius: unknown): string {
+    if (typeof radius === 'string' && radius) {
+      return radius;
     }
-    else if (curosr === 'light') {
-      document.documentElement.classList.remove('dark')
-    }
-    document.documentElement.classList.add(curosr)
-    storeTheme(theme)
+    return '0.5'; // 默认值
   }
 
-  // React to changes in system color scheme.
-  matchMedia(`(prefers-color-scheme: light)`).addEventListener('change', () => {
-    if (loadTheme() === 'auto') {
-      onThemeChange('auto')
+  /** 加载圆角偏好 */
+  function loadRadiusTheme(): string {
+    return parseRadiusTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.radius));
+  }
+
+  /** 保存圆角偏好 */
+  function storeRadiusTheme(radius: string): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(storageKey.radius, radius);
     }
-  })
+  }
+
+  /** 更新圆角 */
+  function onRadiusThemeChange(radius: string): void {
+    document.documentElement.style.setProperty('--radius', `${radius}rem`);
+    storeRadiusTheme(radius);
+
+    // 更新当前活动选项的样式
+    const options = document.querySelectorAll('.radius-option');
+    options.forEach((option) => {
+      if (option.getAttribute('data-radius-value') === radius) {
+        option.classList.add('active');
+      }
+      else {
+        option.classList.remove('active');
+      }
+    });
+  }
 
   customElements.define(
-    'starlight-theme-destyler-select',
-    class StarlightThemeBlackSelect extends HTMLElement {
+    'destyler-theme-destyler-select',
+    class ThemeDestylerSelect extends HTMLElement {
       constructor() {
         super()
-        onThemeChange(loadTheme())
-        const button = this.querySelector('button')
-        button?.addEventListener('click', () => {
-          const theme = parseTheme(document.documentElement.dataset.theme)
-          const newTheme = theme === 'dark' ? 'light' : theme === 'light' ? 'dark' : 'auto'
-          onThemeChange(newTheme)
-          button?.setAttribute('aria-label', `${newTheme} theme`)
+        // 初始化主题设置
+        const currentColorTheme = loadColorTheme()
+        onColorThemeChange(currentColorTheme)
+        
+        // 初始化圆角设置
+        const currentRadiusTheme = loadRadiusTheme()
+        onRadiusThemeChange(currentRadiusTheme)
+
+        // 元素引用
+        const button = this.querySelector('.theme-toggle')
+        const popover = this.querySelector('.theme-popover')
+
+        // 添加重置按钮功能
+        const resetButton = this.querySelector('.popover-reset')!.closest('button')
+        resetButton?.addEventListener('click', () => {
+          onColorThemeChange('zinc')
+        })
+
+        // 添加关闭按钮功能
+        const closeButton = this.querySelector('.popover-close')!.closest('button')
+        closeButton?.addEventListener('click', () => {
+          popover?.classList.remove('visible')
+          button?.setAttribute('aria-expanded', 'false')
+        })
+
+        // 切换弹出菜单显示
+        button?.addEventListener('click', (e) => {
+          e.stopPropagation()
+          popover?.classList.toggle('visible')
+          const expanded = popover?.classList.contains('visible')
+          button.setAttribute('aria-expanded', expanded ? 'true' : 'false')
+        })
+
+        // 监听颜色选择事件（由 ColorPickPill 组件触发）
+        this.addEventListener('color-selected', (e:any) => {
+          console.log('Color selected:', e)
+          const colorValue = e.detail.value
+          onColorThemeChange(colorValue)
+        })
+
+        // 监听圆角选择事件（由 RadiusPill 组件触发）
+        this.addEventListener('radius-selected', (e:any) => {
+          console.log('Radius selected:', e);
+          const radiusValue = e.detail.value;
+          onRadiusThemeChange(radiusValue);
+        });
+
+        // 点击外部区域关闭菜单
+        document.addEventListener('click', (event) => {
+          if (!this.contains(event.target as Node)) {
+            popover?.classList.remove('visible')
+            button?.setAttribute('aria-expanded', 'false')
+          }
         })
       }
     },

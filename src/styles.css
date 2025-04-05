@@ -4,8 +4,6 @@
   --sl-font: 'Geist Sans', sans-serif;
   --sl-font-mono: 'Geist Mono', monospace;
 
-  --radius: 0.5rem;
-
   --header-height: 4rem;
 
   --sl-color-text-accent: hsl(var(--primary));

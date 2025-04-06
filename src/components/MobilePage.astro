@@ -1,0 +1,59 @@
+---
+import TableOfContentsList from './TableOfContents/TableOfContentsList.astro'
+
+const { toc } = Astro.locals.starlightRoute
+---
+
+<div class="">
+  <button
+    id="toc-btn"
+    class="flex items-center leading-[47px] text-xs font-medium transition-[color] duration-[0.5s] px-6 py-0"
+  >
+    <span class="op-50 mr-2">Table of Contents</span>
+    <div class="size-4 i-carbon:chevron-right op-50 transition-transform duration-300" id="toc-icon"></div>
+  </button>
+
+  <div
+    id="toc-popover"
+    class="absolute left-5 right-5 top-[calc(100%+0.5rem)]  max-h-[40vh]
+    overflow-y-auto bg-background backdrop-blur rounded-lg shadow-lg transform
+    opacity-0 -translate-y-2 invisible transition-all duration-300 z-50 border border-border"
+  >
+    <div class="px-4 py-2">
+      <TableOfContentsList toc={toc!.items} />
+    </div>
+  </div>
+</div>
+
+<script src="./TableOfContents/starlight-toc"></script>
+
+<script>
+  const tocBtn = document.getElementById('toc-btn')
+  const tocPopover = document.getElementById('toc-popover')
+  const tocIcon = document.getElementById('toc-icon')
+  let isOpen = false
+
+  const closePopover = () => {
+    isOpen = false
+    tocPopover?.classList.add('invisible', 'opacity-0', '-translate-y-2')
+    tocIcon?.classList.remove('rotate-90')
+  }
+
+  tocBtn?.addEventListener('click', () => {
+    isOpen = !isOpen
+
+    if (isOpen) {
+      tocPopover?.classList.remove('invisible', 'opacity-0', '-translate-y-2')
+      tocIcon?.classList.add('rotate-90')
+    } else {
+      closePopover()
+    }
+  })
+
+  // 监听目录列表的点击事件
+  tocPopover?.addEventListener('click', (e) => {
+    if (e.target instanceof HTMLAnchorElement) {
+      closePopover()
+    }
+  })
+</script>

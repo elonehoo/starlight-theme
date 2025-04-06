@@ -15,6 +15,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./unocss": "./src/unocss/index.ts",
+    "./vite/inject-components": "./src/vite/vite-plugin-inject-components.ts",
     "./styles": "./src/styles.css",
     "./schema": "./src/schema.ts",
     "./components": "./src/user-components.ts",

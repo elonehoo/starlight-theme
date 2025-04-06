@@ -3,6 +3,7 @@ import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 import destylerTheme from 'starlight-theme-destyler'
 import UnoCSS from 'unocss/astro'
+import injectComponents from 'starlight-theme-destyler/vite/inject-components'
 
 export default defineConfig({
   markdown: {
@@ -92,4 +93,11 @@ export default defineConfig({
       title: '@destyler/theme',
     }),
   ],
+  vite:{
+    plugins:[
+      injectComponents({
+        Sidebar: './src/components/Sidebar.astro',
+      }),
+    ]
+  }
 })

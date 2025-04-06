@@ -1,10 +1,9 @@
 <button
   class="[all:unset] inline-flex h-8 w-8 items-center
   justify-center text-4 leading-6 text-foreground"
-  popovertargetaction="toggle"
-  popovertarget="drawer"
+  id="mobile-menu-toggle"
 >
-  <div class="relative size-3 flex flex-col justify-around items-end">
+  <div class="relative size-3 flex flex-col justify-around items-end" id="menu-icon">
     <span class="block w-2.5 h-[1px] bg-current rounded-full transition-all"></span>
     <span class="block w-3 h-[1px] bg-current rounded-full transition-all"></span>
     <span class="block w-1.5 h-[1px] bg-current rounded-full transition-all"></span>
@@ -12,9 +11,15 @@
   <span class="sr-only">Toggle Menu</span>
 </button>
 
-<div id="drawer" popover="auto" class="drawer">
-  <slot />
-</div>
+<dialog id="drawer" class="drawer">
+  <div
+    id="drawer-content"
+    class="drawer-content fixed top-[var(--header-height,3rem)] left-0 right-0 bg-background z-50000 p-4 w-full
+    h-100vh flex flex-col overflow-auto"
+  >
+    123131
+  </div>
+</dialog>
 
 <style>
   button {
@@ -22,17 +27,120 @@
   }
 
   .drawer {
-    --at-apply: fixed inset-0 bg-background z-50 p-4 w-screen h-screen;
-    --at-apply: flex flex-col;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    width: 100%;
+    height: calc(100% - var(--header-height, 3rem));
+    top: var(--header-height, 3rem);
+    z-index: 50;
   }
 
-  .drawer:not([popover-open]) {
-    display: none;
+  .drawer::backdrop {
+    background: transparent;
+  }
+
+  .drawer-content {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  dialog[open] .drawer-content {
+    transform: translateY(0);
+  }
+
+  /* 添加X图标的样式 */
+  #menu-icon.active span:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+    width: 3px;
+    height: 14px;
+  }
+
+  #menu-icon.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #menu-icon.active span:nth-child(3) {
+    transform: translateY(-4px) rotate(-45deg);
+    width: 3px;
+    height: 14px;
+  }
+
+  /* 修复X图标的样式 */
+  #menu-icon.active {
+    justify-content: center;
+    align-items: center;
+  }
+
+  #menu-icon.active span {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+  }
+
+  #menu-icon.active span:nth-child(1) {
+    transform: rotate(45deg);
+    width: 14px;
+  }
+
+  #menu-icon.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #menu-icon.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    width: 14px;
+  }
+
+  /* 禁止滚动时的body样式 */
+  :global(body.no-scroll) {
+    overflow: hidden;
+    height: 100vh;
+    touch-action: none;
+    -ms-touch-action: none;
   }
 
   @media (min-width: 50em) {
     .drawer {
-      display: none;
+      display: none !important;
     }
   }
 </style>
+
+<script>
+const drawer = document.getElementById('drawer') as HTMLDialogElement
+const drawerContent = document.getElementById('drawer-content')
+const menuBtn = document.getElementById('mobile-menu-toggle')
+const menuIcon = document.getElementById('menu-icon')
+
+menuBtn?.addEventListener('click', () => {
+  if (!drawer?.open) {
+    // 打开抽屉
+    drawer?.showModal()
+    menuIcon?.classList.add('active') // 添加active类，显示X图标
+    document.body.classList.add('no-scroll') // 禁止背景滚动
+  }
+  else {
+    // 关闭抽屉
+    drawer?.close()
+    menuIcon?.classList.remove('active') // 移除active类，显示三线图标
+    document.body.classList.remove('no-scroll') // 恢复背景滚动
+  }
+})
+
+// 点击背景关闭对话框
+drawer?.addEventListener('click', (e) => {
+  const rect = drawerContent?.getBoundingClientRect()
+  if (rect
+    && (e.clientY < rect.top
+      || e.clientY > rect.bottom
+       || e.clientX < rect.left
+       || e.clientX > rect.right)) {
+    drawer.close()
+    menuIcon?.classList.remove('active')
+    document.body.classList.remove('no-scroll') // 恢复背景滚动
+  }
+})
+</script>

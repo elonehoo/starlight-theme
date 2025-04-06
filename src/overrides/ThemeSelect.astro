@@ -1,7 +1,7 @@
 ---
+import ColorAppearance from '../components/ColorAppearance.astro'
 import ColorPickPill from '../components/ColorPickPill.astro'
 import RadiusPill from '../components/RadiusPill.astro'
-import ColorAppearance from '../components/ColorAppearance.astro'
 
 import { colors } from '../unocss/theme'
 
@@ -106,360 +106,360 @@ const RADII = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
 </style>
 
 <script is:inline>
-  (function() {
-    function loadSavedColorTheme() {
-      try {
-        const savedTheme = localStorage.getItem('destyler-color-theme');
-        // Use saved theme or default value
-        const colorTheme = savedTheme || 'zinc';
+(function () {
+  function loadSavedColorTheme() {
+    try {
+      const savedTheme = localStorage.getItem('destyler-color-theme')
+      // Use saved theme or default value
+      const colorTheme = savedTheme || 'zinc'
 
-        // Remove all color theme classes
-        const htmlClasses = document.documentElement.classList;
-        for (let i = 0; i < htmlClasses.length; i++) {
-          const cls = htmlClasses[i];
-          if (cls && cls.startsWith('theme-')) {
-            document.documentElement.classList.remove(cls);
-          }
+      // Remove all color theme classes
+      const htmlClasses = document.documentElement.classList
+      for (let i = 0; i < htmlClasses.length; i++) {
+        const cls = htmlClasses[i]
+        if (cls && cls.startsWith('theme-')) {
+          document.documentElement.classList.remove(cls)
         }
-
-        // Apply saved theme
-        document.documentElement.classList.add(`theme-${colorTheme}`);
-        return colorTheme;
-      } catch (e) {
-        console.error("Error loading saved color theme:", e);
-        document.documentElement.classList.add('theme-zinc');
-        return 'zinc';
-      }
-    }
-
-    function loadSavedRadius() {
-      try {
-        const savedRadius = localStorage.getItem('destyler-radius');
-        // Use saved radius or default value
-        const radius = savedRadius || '0.5';
-
-        // Apply saved radius
-        document.documentElement.style.setProperty('--radius', `${radius}rem`);
-        return radius;
-      } catch (e) {
-        console.error("Error loading saved radius:", e);
-        document.documentElement.style.setProperty('--radius', '0.5rem');
-        return '0.5';
-      }
-    }
-
-    // Load light/dark mode settings
-    function loadSavedAppearance() {
-      try {
-        const savedTheme = localStorage.getItem('theme');
-        // If there's a saved theme setting, use it directly
-        if (savedTheme) {
-          // Apply theme setting
-          applyAppearanceTheme(savedTheme);
-          return savedTheme;
-        }
-
-        // If not, check system preference
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const defaultTheme = systemPrefersDark ? 'dark' : 'light';
-
-        // Apply default theme
-        applyAppearanceTheme('system');
-        return 'system';
-      } catch (e) {
-        console.error("Error loading saved appearance:", e);
-        // Default to light mode
-        applyAppearanceTheme('light');
-        return 'light';
-      }
-    }
-
-    // Apply light/dark mode
-    function applyAppearanceTheme(theme) {
-      // Remove existing theme classes
-      document.documentElement.classList.remove('light', 'dark');
-
-      let appliedTheme = theme;
-      if (theme === 'system') {
-        // For system theme, check system preference
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.classList.add(systemTheme);
-        appliedTheme = systemTheme;
-      } else {
-        // Apply specified theme directly
-        document.documentElement.classList.add(theme);
-        appliedTheme = theme;
       }
 
-      // Sync update data-theme attribute
-      document.documentElement.setAttribute('data-theme', appliedTheme);
-
-      // Save to localStorage
-      localStorage.setItem('theme', theme);
-      return theme;
+      // Apply saved theme
+      document.documentElement.classList.add(`theme-${colorTheme}`)
+      return colorTheme
     }
-
-    // Ensure theme and radius are applied early in page load
-    const currentColorTheme = loadSavedColorTheme();
-    const currentRadius = loadSavedRadius();
-    const currentAppearance = loadSavedAppearance();
-
-    // Set up system theme change listener
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', (e) => {
-      // Only auto-switch when user has selected "system" theme
-      if (localStorage.getItem('theme') === 'system') {
-        const newTheme = e.matches ? 'dark' : 'light';
-        document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(newTheme);
-        // Sync update data-theme attribute
-        document.documentElement.setAttribute('data-theme', newTheme);
-      }
-    });
-
-    // Add theme management methods to global object for other scripts
-    window.StarlightThemeManager = window.StarlightThemeManager || {};
-    window.StarlightThemeManager.getCurrentColorTheme = function() {
-      return currentColorTheme;
-    };
-    window.StarlightThemeManager.getCurrentRadius = function() {
-      return currentRadius;
-    };
-    window.StarlightThemeManager.getCurrentAppearance = function() {
-      return currentAppearance;
-    };
-    window.StarlightThemeManager.setAppearance = function(theme) {
-      return applyAppearanceTheme(theme);
-    };
-
-    // Call Starlight's theme update
-    if (window.StarlightThemeProvider) {
-      StarlightThemeProvider.updatePickers();
-    }
-
-    document.documentElement.classList.add('group');
-  })();
-</script>
-
-<script>
-  /** Key in `localStorage` to store preferences at. */
-  const storageKey = {
-    color: 'destyler-color-theme',
-    radius: 'destyler-radius',
-    appearance: 'theme'
-  }
-
-  /** Parse color theme, allow any string value */
-  function parseColorTheme(theme: unknown): string {
-    return typeof theme === 'string' && theme ? theme : 'zinc'
-  }
-
-  /** Load theme preferences */
-  function loadColorTheme(): string {
-    return parseColorTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.color))
-  }
-
-  /** Save theme preferences */
-  function storeColorTheme(theme: string): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(storageKey.color, theme)
+    catch (e) {
+      console.error('Error loading saved color theme:', e)
+      document.documentElement.classList.add('theme-zinc')
+      return 'zinc'
     }
   }
 
-  /** Update color theme */
-  function onColorThemeChange(theme: string): void {
-    // Remove all current color theme classes
-    document.documentElement.classList.forEach((cls) => {
-      if (cls.startsWith('theme-')) {
-        document.documentElement.classList.remove(cls)
-      }
-    })
+  function loadSavedRadius() {
+    try {
+      const savedRadius = localStorage.getItem('destyler-radius')
+      // Use saved radius or default value
+      const radius = savedRadius || '0.5'
 
-    // Add new color theme class
-    document.documentElement.classList.add(`theme-${theme}`)
-    storeColorTheme(theme)
-
-    // Update the style of the currently active option
-    const options = document.querySelectorAll('.color-option')
-    options.forEach((option) => {
-      if (option.getAttribute('data-color-value') === theme) {
-        option.classList.add('active')
-      }
-      else {
-        option.classList.remove('active')
-      }
-    })
-  }
-
-  /** Parse radius theme, allow any numeric value */
-  function parseRadiusTheme(radius: unknown): string {
-    if (typeof radius === 'string' && radius) {
-      return radius;
+      // Apply saved radius
+      document.documentElement.style.setProperty('--radius', `${radius}rem`)
+      return radius
     }
-    return '0.5'; // Default value
-  }
-
-  /** Load radius preferences */
-  function loadRadiusTheme(): string {
-    return parseRadiusTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.radius));
-  }
-
-  /** Save radius preferences */
-  function storeRadiusTheme(radius: string): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(storageKey.radius, radius);
+    catch (e) {
+      console.error('Error loading saved radius:', e)
+      document.documentElement.style.setProperty('--radius', '0.5rem')
+      return '0.5'
     }
   }
 
-  /** Update radius */
-  function onRadiusThemeChange(radius: string): void {
-    document.documentElement.style.setProperty('--radius', `${radius}rem`);
-    storeRadiusTheme(radius);
+  // Load light/dark mode settings
+  function loadSavedAppearance() {
+    try {
+      const savedTheme = localStorage.getItem('theme')
+      // If there's a saved theme setting, use it directly
+      if (savedTheme) {
+        // Apply theme setting
+        applyAppearanceTheme(savedTheme)
+        return savedTheme
+      }
 
-    // Update the style of the currently active option
-    const options = document.querySelectorAll('.radius-option');
-    options.forEach((option) => {
-      if (option.getAttribute('data-radius-value') === radius) {
-        option.classList.add('active');
-      }
-      else {
-        option.classList.remove('active');
-      }
-    });
+      // Apply default theme
+      applyAppearanceTheme('system')
+      return 'system'
+    }
+    catch (e) {
+      console.error('Error loading saved appearance:', e)
+      // Default to light mode
+      applyAppearanceTheme('light')
+      return 'light'
+    }
   }
 
-  /** Apply light/dark mode theme */
-  function applyAppearanceTheme(theme: string): void {
+  // Apply light/dark mode
+  function applyAppearanceTheme(theme) {
     // Remove existing theme classes
-    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.remove('light', 'dark')
 
-    let appliedTheme = theme;
+    let appliedTheme = theme
     if (theme === 'system') {
-      // Check system theme preference
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      document.documentElement.classList.add(systemTheme);
-      appliedTheme = systemTheme;
-    } else {
+      // For system theme, check system preference
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      document.documentElement.classList.add(systemTheme)
+      appliedTheme = systemTheme
+    }
+    else {
       // Apply specified theme directly
-      document.documentElement.classList.add(theme);
-      appliedTheme = theme;
+      document.documentElement.classList.add(theme)
+      appliedTheme = theme
     }
 
     // Sync update data-theme attribute
-    document.documentElement.setAttribute('data-theme', appliedTheme);
+    document.documentElement.setAttribute('data-theme', appliedTheme)
 
     // Save to localStorage
-    try {
-      localStorage.setItem('theme', theme);
-    } catch (e) {
-      console.warn('Failed to save theme preference:', e);
+    localStorage.setItem('theme', theme)
+    return theme
+  }
+
+  // Ensure theme and radius are applied early in page load
+  const currentColorTheme = loadSavedColorTheme()
+  const currentRadius = loadSavedRadius()
+  const currentAppearance = loadSavedAppearance()
+
+  // Set up system theme change listener
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  mediaQuery.addEventListener('change', (e) => {
+    // Only auto-switch when user has selected "system" theme
+    if (localStorage.getItem('theme') === 'system') {
+      const newTheme = e.matches ? 'dark' : 'light'
+      document.documentElement.classList.remove('light', 'dark')
+      document.documentElement.classList.add(newTheme)
+      // Sync update data-theme attribute
+      document.documentElement.setAttribute('data-theme', newTheme)
     }
+  })
 
-    // Update button state
-    updateAppearanceButtonState();
+  // Add theme management methods to global object for other scripts
+  window.StarlightThemeManager = window.StarlightThemeManager || {}
+  window.StarlightThemeManager.getCurrentColorTheme = function () {
+    return currentColorTheme
+  }
+  window.StarlightThemeManager.getCurrentRadius = function () {
+    return currentRadius
+  }
+  window.StarlightThemeManager.getCurrentAppearance = function () {
+    return currentAppearance
+  }
+  window.StarlightThemeManager.setAppearance = function (theme) {
+    return applyAppearanceTheme(theme)
   }
 
-  /** Update light/dark theme button state */
-  function updateAppearanceButtonState(): void {
-    const currentTheme = localStorage.getItem('theme') || 'system';
-
-    document.querySelectorAll('[data-theme-value]').forEach((button) => {
-      const themeValue = button.getAttribute('data-theme-value');
-      if (themeValue === currentTheme) {
-        button.classList.add('active');
-      } else {
-        button.classList.remove('active');
-      }
-    });
+  // Call Starlight's theme update
+  if (window.StarlightThemeProvider) {
+    StarlightThemeProvider.updatePickers()
   }
 
-  customElements.define(
-    'destyler-theme-destyler-select',
-    class ThemeDestylerSelect extends HTMLElement {
-      constructor() {
-        super()
-        // Initialize theme settings
-        const currentColorTheme = loadColorTheme()
-        onColorThemeChange(currentColorTheme)
+  document.documentElement.classList.add('group')
+})()
+</script>
 
-        // Initialize radius settings
-        const currentRadiusTheme = loadRadiusTheme()
-        onRadiusThemeChange(currentRadiusTheme)
+<script>
+/** Key in `localStorage` to store preferences at. */
+const storageKey = {
+  color: 'destyler-color-theme',
+  radius: 'destyler-radius',
+  appearance: 'theme',
+}
 
-        // Element references
-        const button = this.querySelector('.theme-toggle')
-        const popover = this.querySelector('.theme-popover')
+/** Parse color theme, allow any string value */
+function parseColorTheme(theme: unknown): string {
+  return typeof theme === 'string' && theme ? theme : 'zinc'
+}
 
-        // Add reset button functionality
-        const resetButton = this.querySelector('.popover-reset')!.closest('button')
-        resetButton?.addEventListener('click', () => {
-          // Reset color theme to default value
-          onColorThemeChange('zinc')
-          // Reset radius to default value 0.5
-          onRadiusThemeChange('0.5')
+/** Load theme preferences */
+function loadColorTheme(): string {
+  return parseColorTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.color))
+}
 
-          // Manually trigger a radius-selected event to update UI
-          const event = new CustomEvent('radius-selected', {
-            detail: { value: '0.5' },
-            bubbles: true
-          })
-          this.dispatchEvent(event)
+/** Save theme preferences */
+function storeColorTheme(theme: string): void {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(storageKey.color, theme)
+  }
+}
+
+/** Update color theme */
+function onColorThemeChange(theme: string): void {
+  // Remove all current color theme classes
+  document.documentElement.classList.forEach((cls) => {
+    if (cls.startsWith('theme-')) {
+      document.documentElement.classList.remove(cls)
+    }
+  })
+
+  // Add new color theme class
+  document.documentElement.classList.add(`theme-${theme}`)
+  storeColorTheme(theme)
+
+  // Update the style of the currently active option
+  const options = document.querySelectorAll('.color-option')
+  options.forEach((option) => {
+    if (option.getAttribute('data-color-value') === theme) {
+      option.classList.add('active')
+    }
+    else {
+      option.classList.remove('active')
+    }
+  })
+}
+
+/** Parse radius theme, allow any numeric value */
+function parseRadiusTheme(radius: unknown): string {
+  if (typeof radius === 'string' && radius) {
+    return radius
+  }
+  return '0.5' // Default value
+}
+
+/** Load radius preferences */
+function loadRadiusTheme(): string {
+  return parseRadiusTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey.radius))
+}
+
+/** Save radius preferences */
+function storeRadiusTheme(radius: string): void {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(storageKey.radius, radius)
+  }
+}
+
+/** Update radius */
+function onRadiusThemeChange(radius: string): void {
+  document.documentElement.style.setProperty('--radius', `${radius}rem`)
+  storeRadiusTheme(radius)
+
+  // Update the style of the currently active option
+  const options = document.querySelectorAll('.radius-option')
+  options.forEach((option) => {
+    if (option.getAttribute('data-radius-value') === radius) {
+      option.classList.add('active')
+    }
+    else {
+      option.classList.remove('active')
+    }
+  })
+}
+
+/** Apply light/dark mode theme */
+function applyAppearanceTheme(theme: string): void {
+  // Remove existing theme classes
+  document.documentElement.classList.remove('light', 'dark')
+
+  let appliedTheme = theme
+  if (theme === 'system') {
+    // Check system theme preference
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    document.documentElement.classList.add(systemTheme)
+    appliedTheme = systemTheme
+  }
+  else {
+    // Apply specified theme directly
+    document.documentElement.classList.add(theme)
+    appliedTheme = theme
+  }
+
+  // Sync update data-theme attribute
+  document.documentElement.setAttribute('data-theme', appliedTheme)
+
+  // Save to localStorage
+  try {
+    localStorage.setItem('theme', theme)
+  }
+  catch (e) {
+    console.warn('Failed to save theme preference:', e)
+  }
+
+  // Update button state
+  updateAppearanceButtonState()
+}
+
+/** Update light/dark theme button state */
+function updateAppearanceButtonState(): void {
+  const currentTheme = localStorage.getItem('theme') || 'system'
+
+  document.querySelectorAll('[data-theme-value]').forEach((button) => {
+    const themeValue = button.getAttribute('data-theme-value')
+    if (themeValue === currentTheme) {
+      button.classList.add('active')
+    }
+    else {
+      button.classList.remove('active')
+    }
+  })
+}
+
+customElements.define(
+  'destyler-theme-destyler-select',
+  class ThemeDestylerSelect extends HTMLElement {
+    constructor() {
+      super()
+      // Initialize theme settings
+      const currentColorTheme = loadColorTheme()
+      onColorThemeChange(currentColorTheme)
+
+      // Initialize radius settings
+      const currentRadiusTheme = loadRadiusTheme()
+      onRadiusThemeChange(currentRadiusTheme)
+
+      // Element references
+      const button = this.querySelector('.theme-toggle')
+      const popover = this.querySelector('.theme-popover')
+
+      // Add reset button functionality
+      const resetButton = this.querySelector('.popover-reset')!.closest('button')
+      resetButton?.addEventListener('click', () => {
+        // Reset color theme to default value
+        onColorThemeChange('zinc')
+        // Reset radius to default value 0.5
+        onRadiusThemeChange('0.5')
+
+        // Manually trigger a radius-selected event to update UI
+        const event = new CustomEvent('radius-selected', {
+          detail: { value: '0.5' },
+          bubbles: true,
         })
+        this.dispatchEvent(event)
+      })
 
-        // Add close button functionality
-        const closeButton = this.querySelector('.popover-close')!.closest('button')
-        closeButton?.addEventListener('click', () => {
+      // Add close button functionality
+      const closeButton = this.querySelector('.popover-close')!.closest('button')
+      closeButton?.addEventListener('click', () => {
+        popover?.classList.remove('visible')
+        button?.setAttribute('aria-expanded', 'false')
+      })
+
+      // Toggle popover visibility
+      button?.addEventListener('click', (e) => {
+        e.stopPropagation()
+        popover?.classList.toggle('visible')
+        const expanded = popover?.classList.contains('visible')
+        button.setAttribute('aria-expanded', expanded ? 'true' : 'false')
+
+        // Update light/dark theme button state when menu is opened
+        if (expanded) {
+          updateAppearanceButtonState()
+        }
+      })
+
+      // Listen for color selection events (triggered by ColorPickPill component)
+      this.addEventListener('color-selected', (e: any) => {
+        const colorValue = e.detail.value
+        onColorThemeChange(colorValue)
+      })
+
+      // Listen for radius selection events (triggered by RadiusPill component)
+      this.addEventListener('radius-selected', (e: any) => {
+        const radiusValue = e.detail.value
+        onRadiusThemeChange(radiusValue)
+      })
+
+      // Listen for light/dark theme selection events (triggered by ColorAppearance component)
+      this.addEventListener('theme-selected', (e: any) => {
+        const themeValue = e.detail.value
+        applyAppearanceTheme(themeValue)
+      })
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (event) => {
+        if (!this.contains(event.target as Node)) {
           popover?.classList.remove('visible')
           button?.setAttribute('aria-expanded', 'false')
-        })
+        }
+      })
 
-        // Toggle popover visibility
-        button?.addEventListener('click', (e) => {
-          e.stopPropagation()
-          popover?.classList.toggle('visible')
-          const expanded = popover?.classList.contains('visible')
-          button.setAttribute('aria-expanded', expanded ? 'true' : 'false')
-
-          // Update light/dark theme button state when menu is opened
-          if (expanded) {
-            updateAppearanceButtonState()
-          }
-        })
-
-        // Listen for color selection events (triggered by ColorPickPill component)
-        this.addEventListener('color-selected', (e:any) => {
-          console.log('Color selected:', e)
-          const colorValue = e.detail.value
-          onColorThemeChange(colorValue)
-        })
-
-        // Listen for radius selection events (triggered by RadiusPill component)
-        this.addEventListener('radius-selected', (e:any) => {
-          console.log('Radius selected:', e);
-          const radiusValue = e.detail.value;
-          onRadiusThemeChange(radiusValue);
-        });
-
-        // Listen for light/dark theme selection events (triggered by ColorAppearance component)
-        this.addEventListener('theme-selected', (e:any) => {
-          console.log('Theme appearance selected:', e);
-          const themeValue = e.detail.value;
-          applyAppearanceTheme(themeValue);
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (event) => {
-          if (!this.contains(event.target as Node)) {
-            popover?.classList.remove('visible')
-            button?.setAttribute('aria-expanded', 'false')
-          }
-        })
-
-        // Update light/dark theme button state once on initialization
-        setTimeout(() => {
-          updateAppearanceButtonState()
-        }, 0)
-      }
-    },
-  )
+      // Update light/dark theme button state once on initialization
+      setTimeout(() => {
+        updateAppearanceButtonState()
+      }, 0)
+    }
+  },
+)
 </script>

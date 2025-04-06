@@ -1,10 +1,10 @@
 ---
 interface Props {
-  radius: number;
-  selected?: number;
+  radius: number
+  selected?: number
 }
 
-const { radius, selected } = Astro.props;
+const { radius, selected } = Astro.props
 // Cannot determine the selected radius during SSR, will handle in client-side script
 const isSelected = radius === selected;
 ---
@@ -32,88 +32,90 @@ const isSelected = radius === selected;
 function getCurrentRadius() {
   try {
     // First try to get from localStorage as it's the most accurate source
-    const savedRadius = localStorage.getItem('destyler-radius');
+    const savedRadius = localStorage.getItem('destyler-radius')
     if (savedRadius !== null) {
-      return parseFloat(savedRadius);
+      return Number.parseFloat(savedRadius)
     }
 
     // If not in localStorage, get from CSS variable
-    const radiusVar = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim();
+    const radiusVar = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim()
     if (radiusVar) {
-      const match = radiusVar.match(/^([\d.]+)rem$/);
+      const match = radiusVar.match(/^([\d.]+)rem$/)
       if (match) {
-        return parseFloat(match[1]);
+        return Number.parseFloat(match[1])
       }
     }
 
-    return 0.5;
-  } catch (e) {
-    return 0.5;
+    return 0.5
+  }
+  catch (e) {
+    console.warn('Error retrieving radius from localStorage or CSS variable:', e)
+    return 0.5
   }
 }
 
 // Update selected state for all radius options
 function updateSelectedState() {
-  const currentRadius = getCurrentRadius();
+  const currentRadius = getCurrentRadius()
 
   document.querySelectorAll('.radius-option').forEach((button) => {
-    const radiusValue = button.getAttribute('data-radius-value');
+    const radiusValue = button.getAttribute('data-radius-value')
 
     // Convert to string for comparison to avoid type mismatch
-    const isSelected = radiusValue === currentRadius.toString();
+    const isSelected = radiusValue === currentRadius.toString()
 
     if (isSelected) {
-      button.classList.add('active');
-      button.classList.add('border-foreground');
-      button.classList.add('border-2');
-      button.classList.remove('border-input');
+      button.classList.add('active')
+      button.classList.add('border-foreground')
+      button.classList.add('border-2')
+      button.classList.remove('border-input')
     }
     else {
-      button.classList.remove('active');
-      button.classList.remove('border-foreground');
-      button.classList.remove('border-2');
-      button.classList.add('border-input');
+      button.classList.remove('active')
+      button.classList.remove('border-foreground')
+      button.classList.remove('border-2')
+      button.classList.add('border-input')
     }
-  });
+  })
 }
 
 // Initialize
 function initialize() {
-  updateSelectedState();
+  updateSelectedState()
 }
 
 // Initialize after page load
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initialize);
+  document.addEventListener('DOMContentLoaded', initialize)
 }
 else {
-  initialize();
+  initialize()
 }
 
 // Add click event for buttons
 document.querySelectorAll('[data-radius-value]').forEach((button) => {
   button.addEventListener('click', () => {
-    const radiusValue = parseFloat(button.getAttribute('data-radius-value') || '0');
+    const radiusValue = Number.parseFloat(button.getAttribute('data-radius-value') || '0')
 
     // Force immediate update and save to localStorage
-    const forceUpdateRadius = (radius:any) => {
+    const forceUpdateRadius = (radius: any) => {
       // Update CSS variable
-      document.documentElement.style.setProperty('--radius', `${radius}rem`);
+      document.documentElement.style.setProperty('--radius', `${radius}rem`)
 
       // Save to localStorage
       try {
-        localStorage.setItem('destyler-radius', radius.toString());
+        localStorage.setItem('destyler-radius', radius.toString())
       }
       catch (e) {
-        console.warn(e);
+        console.warn(e)
       }
 
       // Update UI state
-      updateSelectedState();
-    };
+      updateSelectedState()
+    }
 
     // Apply and save radius change
-    forceUpdateRadius(radiusValue);
+    forceUpdateRadius(radiusValue)
 
     // Trigger custom event for parent component to listen
     button.dispatchEvent(
@@ -121,15 +123,15 @@ document.querySelectorAll('[data-radius-value]').forEach((button) => {
         detail: { value: radiusValue.toString() },
         bubbles: true,
       }),
-    );
-  });
-});
+    )
+  })
+})
 
 // Add global event listener to respond to reset events
 document.addEventListener('radius-selected', () => {
   // Ensure state updates in next microtask to avoid timing issues
   setTimeout(() => {
-    updateSelectedState();
-  }, 0);
-});
+    updateSelectedState()
+  }, 0)
+})
 </script>

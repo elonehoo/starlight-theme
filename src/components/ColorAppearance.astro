@@ -1,9 +1,9 @@
 ---
 interface Props {
-  selected?: string;
+  selected?: string
 }
 
-const { selected } = Astro.props;
+const { selected } = Astro.props
 
 const themeOptions = [
   { value: 'light', label: 'Light', icon: 'i-carbon:sun' },
@@ -13,7 +13,7 @@ const themeOptions = [
 ---
 
 <div class="flex gap-2">
-  {themeOptions.map((option) => (
+  {themeOptions.map(option => (
     <button
       class:list={[
         'inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors',
@@ -35,105 +35,111 @@ const themeOptions = [
 function getCurrentTheme() {
   try {
     // First try to get from localStorage
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme')
     if (savedTheme) {
-      return savedTheme;
+      return savedTheme
     }
 
     // If no stored theme, check HTML document class to determine current theme
     if (document.documentElement.classList.contains('dark')) {
-      return 'dark';
+      return 'dark'
     }
     else if (document.documentElement.classList.contains('light')) {
-      return 'light';
+      return 'light'
     }
 
     // Return default system theme
-    return 'system';
-  } catch (e) {
-    return 'system';
+    return 'system'
+  }
+  catch (e) {
+    console.warn('Failed to retrieve theme preference:', e)
+    return 'system'
   }
 }
 
 // Apply theme
 function applyTheme(theme: string) {
   // Remove existing theme classes
-  document.documentElement.classList.remove('light', 'dark');
+  document.documentElement.classList.remove('light', 'dark')
 
   if (theme === 'system') {
     // Detect system theme preference
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.classList.add(systemTheme);
-  } else {
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    document.documentElement.classList.add(systemTheme)
+  }
+  else {
     // Directly apply specified theme
-    document.documentElement.classList.add(theme);
+    document.documentElement.classList.add(theme)
   }
 
   // Save to localStorage
   try {
-    localStorage.setItem('theme', theme);
-  } catch (e) {
-    console.warn('Failed to save theme preference:', e);
+    localStorage.setItem('theme', theme)
+  }
+  catch (e) {
+    console.warn('Failed to save theme preference:', e)
   }
 }
 
 // Update button states
 function updateButtonStates() {
-  const currentTheme = getCurrentTheme();
+  const currentTheme = getCurrentTheme()
 
   document.querySelectorAll('[data-theme-value]').forEach((button) => {
-    const themeValue = button.getAttribute('data-theme-value');
-    const isSelected = themeValue === currentTheme;
+    const themeValue = button.getAttribute('data-theme-value')
+    const isSelected = themeValue === currentTheme
 
     if (isSelected) {
-      button.classList.add('active');
-      button.classList.add('border-foreground');
-      button.classList.add('border-2');
-      button.classList.remove('border-input');
-    } else {
-      button.classList.remove('active');
-      button.classList.remove('border-foreground');
-      button.classList.remove('border-2');
-      button.classList.add('border-input');
+      button.classList.add('active')
+      button.classList.add('border-foreground')
+      button.classList.add('border-2')
+      button.classList.remove('border-input')
     }
-  });
+    else {
+      button.classList.remove('active')
+      button.classList.remove('border-foreground')
+      button.classList.remove('border-2')
+      button.classList.add('border-input')
+    }
+  })
 }
 
 // Add system theme change listener
 function setupSystemThemeListener() {
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
   mediaQuery.addEventListener('change', (e) => {
     if (getCurrentTheme() === 'system') {
-      document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add(e.matches ? 'dark' : 'light');
+      document.documentElement.classList.remove('light', 'dark')
+      document.documentElement.classList.add(e.matches ? 'dark' : 'light')
     }
-  });
+  })
 }
 
 // Initialize
 function initialize() {
-  const currentTheme = getCurrentTheme();
-  applyTheme(currentTheme);
-  updateButtonStates();
-  setupSystemThemeListener();
+  const currentTheme = getCurrentTheme()
+  applyTheme(currentTheme)
+  updateButtonStates()
+  setupSystemThemeListener()
 }
 
 // Initialize after page load
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initialize);
-} else {
-  initialize();
+  document.addEventListener('DOMContentLoaded', initialize)
+}
+else {
+  initialize()
 }
 
 // Add click event to buttons
 document.querySelectorAll('[data-theme-value]').forEach((button) => {
   button.addEventListener('click', () => {
-    const themeValue = button.getAttribute('data-theme-value');
+    const themeValue = button.getAttribute('data-theme-value')
 
     // Apply and save theme change
-    applyTheme(themeValue || 'system');
-    updateButtonStates();
+    applyTheme(themeValue || 'system')
+    updateButtonStates()
 
     // Trigger custom event
     button.dispatchEvent(
@@ -141,7 +147,7 @@ document.querySelectorAll('[data-theme-value]').forEach((button) => {
         detail: { value: themeValue },
         bubbles: true,
       }),
-    );
-  });
-});
+    )
+  })
+})
 </script>

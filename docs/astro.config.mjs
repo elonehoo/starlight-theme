@@ -21,6 +21,9 @@ export default defineConfig({
       editLink: {
         baseUrl: 'https://github.com/destyler/starlight-theme-destyler/edit/main/docs/',
       },
+      components: {
+        Sidebar: './src/components/Sidebar.astro',
+      },
       plugins: [
         destylerTheme({
           navLinks: [

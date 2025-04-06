@@ -1,6 +1,5 @@
-/* eslint-disable ts/explicit-function-return-type */
 /* eslint-disable accessor-pairs */
-/* eslint-disable ts/strict-boolean-expressions */
+
 import { PAGE_TITLE_ID } from '../../constants'
 
 export class StarlightTOC extends HTMLElement {

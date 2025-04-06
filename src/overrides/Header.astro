@@ -14,8 +14,8 @@ import ThemeSelect from './ThemeSelect.astro'
 const shouldRenderSearch = config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro'
 ---
 
-<header class="sticky top-0 z-10000! w-full -mb-px bg-background text-[--accent] overscroll-none">
-  <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex items-center gap-3 h-[var(--header-height)]">
+<header class="sticky top-0 z-10000! w-full -mb-px bg-background text-[--accent] overscroll-none border-none md:border-x md:border-dashed md:border-border">
+  <div class="px-4 sm:px-6 lg:px-8 w-full flex items-center gap-3 h-[var(--header-height)]">
     <!-- logo -->
     <SiteTitle />
     <!-- nav -->

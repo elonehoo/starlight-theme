@@ -6,4 +6,7 @@ export default antfu({
   ignores: [
     './src/overrides/Search.astro',
   ],
+  rules: {
+    'regexp/no-unused-capturing-group': 'off',
+  },
 })

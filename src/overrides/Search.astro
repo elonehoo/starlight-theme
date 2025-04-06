@@ -80,6 +80,8 @@ class SiteSearch extends HTMLElement {
     const dialog = this.querySelector('dialog')!
     const dialogFrame = this.querySelector('.dialog-frame')!
 
+    const closeModal = () => dialog.close()
+
     /** Close the modal if a user clicks on a link or outside of the modal. */
     const onClick = (event: MouseEvent) => {
       const isLink = 'href' in (event.target || {})
@@ -95,8 +97,6 @@ class SiteSearch extends HTMLElement {
       event?.stopPropagation()
       window.addEventListener('click', onClick)
     }
-
-    const closeModal = () => dialog.close()
 
     openBtn.addEventListener('click', openModal)
     openBtn.disabled = false
@@ -132,7 +132,7 @@ class SiteSearch extends HTMLElement {
       onIdle(async () => {
         // @ts-expect-error — Missing types for @pagefind/default-ui package.
         const { PagefindUI } = await import('@pagefind/default-ui')
-        new PagefindUI({
+        const _page = new PagefindUI({
           ...pagefindUserConfig,
           element: '#starlight__search',
           baseUrl: import.meta.env.BASE_URL,

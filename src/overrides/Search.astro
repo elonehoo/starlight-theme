@@ -38,7 +38,7 @@ dataAttributes['data-strip-trailing-slash'] = ''
           </div>
         )
         : (
-          <div class="search-container">
+          <div class="search-container w-full">
             <div id="starlight__search" />
           </div>
         )
@@ -157,72 +157,41 @@ customElements.define('site-search', SiteSearch)
 
 <style>
   site-search {
-    display: flex;
+    --at-apply: flex;
   }
 
   button[data-open-modal] {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  svg {
-    flex-shrink: 0;
-    width: 1rem;
-    height: 1rem;
-    pointer-events: none;
+    --at-apply: flex items-center cursor-pointer;
   }
 
   .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
+    --at-apply: absolute w-px h-px overflow-hidden whitespace-nowrap -m-px p-0 border-0;
     clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
   }
 
   dialog {
-    margin: 0;
-    background-color: var(--sl-color-gray-6);
-    border: 1px solid var(--sl-color-gray-5);
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-    max-height: 100%;
-    box-shadow: var(--sl-shadow-lg);
+    --at-apply: m-0 bg-background border border-solid border-border
+    w-full max-w-full h-full max-h-full shadow-lg;
+  }
+
+  dialog::backdrop {
+    --at-apply: bg-background/50 backdrop-blur-sm;
   }
 
   @media (min-width: 50rem) {
     dialog {
-      margin: 4rem auto auto;
-      border-radius: 0.5rem;
-      width: 90%;
-      max-width: 40rem;
-      height: max-content;
-      min-height: 15rem;
-      max-height: calc(100% - 8rem);
+      --at-apply: w-[90%] max-w-screen-sm h-max min-h-[15rem]
+      max-h-[calc(100%_-_8rem)] mt-16 mb-auto mx-auto rounded-lg;
     }
 
     .dialog-frame {
-      padding: 1.5rem;
+      --at-apply: p-6;
     }
   }
 
   button[data-close-modal] {
-    position: absolute;
-    z-index: 1;
-    align-items: center;
-    align-self: flex-end;
-    height: calc(64px * var(--pagefind-ui-scale));
-    padding: 0.25rem;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    color: var(--sl-color-text-accent);
+    --at-apply: absolute z-[1] items-center self-end h-[calc(64px_*_var(--pagefind-ui-scale))]
+    cursor-pointer p-1 border-0 [background:transparent] text-dark dark:text-light;
   }
 
   #starlight__search {
@@ -241,24 +210,19 @@ customElements.define('site-search', SiteSearch)
     }
 
     dialog {
-      margin: 4rem auto auto;
-      border-radius: 0.5rem;
-      width: 90%;
-      max-width: 40rem;
-      height: max-content;
-      min-height: 15rem;
-      max-height: calc(100% - 8rem);
+      --at-apply: w-[90%] max-w-screen-sm h-max min-h-[15rem]
+      max-h-[calc(100%_-_8rem)] mt-16 mb-auto mx-auto rounded-lg;
     }
 
     .dialog-frame {
-      padding: 1.5rem;
+      --at-apply: p-6;
     }
   }
 </style>
 
 <style is:global>
   [data-search-modal-open] {
-    overflow: hidden;
+    --at-apply: overflow-hidden;
   }
 
   #starlight__search {
@@ -280,47 +244,41 @@ customElements.define('site-search', SiteSearch)
 
   #starlight__search .pagefind-ui__form::before {
     --pagefind-ui-text: var(--sl-color-gray-1);
-    opacity: 1;
+    --at-apply: op-100;
   }
 
   #starlight__search .pagefind-ui__search-input {
-    color: var(--sl-color-white);
-    font-weight: 400;
+    --at-apply: text-dark dark:text-light font-400 outline-none;
     width: calc(100% - var(--sl-search-cancel-space));
   }
 
   #starlight__search input:focus {
-    --pagefind-ui-border: var(--sl-color-accent);
+    --at-apply: outline-none;
   }
 
   #starlight__search .pagefind-ui__search-clear {
+    --at-apply: w-[calc(60px_*_var(--pagefind-ui-scale))] bg-transparent overflow-hidden p-0;
     inset-inline-end: var(--sl-search-cancel-space);
-    width: calc(60px * var(--pagefind-ui-scale));
-    padding: 0;
-    background-color: transparent;
-    overflow: hidden;
   }
+
   #starlight__search .pagefind-ui__search-clear:focus {
-    outline: 1px solid var(--sl-color-accent);
+    --at-apply: outline-none;
   }
+
   #starlight__search .pagefind-ui__search-clear::before {
+    --at-apply: bg-dark dark:bg-light w-full h-full block;
     content: '';
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
       center / 50% no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
       center / 50% no-repeat;
-    background-color: var(--sl-color-text-accent);
-    display: block;
-    width: 100%;
-    height: 100%;
   }
 
   #starlight__search .pagefind-ui__results > * + * {
     margin-top: var(--sl-search-result-spacing);
   }
   #starlight__search .pagefind-ui__result {
-    border: 0;
-    padding: 0;
+    --at-apply: border-0 p-0;
   }
 
   #starlight__search .pagefind-ui__result-nested {
@@ -363,6 +321,7 @@ customElements.define('site-search', SiteSearch)
     padding: var(--sl-search-result-pad-block) var(--sl-search-result-pad-inline-end);
     padding-inline-start: var(--sl-search-result-pad-inline-start);
   }
+
   #starlight__search .pagefind-ui__result-inner > .pagefind-ui__result-title::before {
     content: '';
     position: absolute;
@@ -377,8 +336,7 @@ customElements.define('site-search', SiteSearch)
   }
 
   #starlight__search .pagefind-ui__result-inner {
-    align-items: stretch;
-    gap: 1px;
+    --at-apply: items-stretch gap-1px;
   }
 
   #starlight__search .pagefind-ui__result-link {
@@ -430,8 +388,8 @@ customElements.define('site-search', SiteSearch)
   }
 
   #starlight__search mark {
+    --at-apply: bg-background bg-op-50;
     color: var(--sl-color-gray-2);
-    background-color: transparent;
     font-weight: 600;
   }
 </style>

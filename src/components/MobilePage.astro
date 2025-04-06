@@ -28,32 +28,32 @@ const { toc } = Astro.locals.starlightRoute
 <script src="./TableOfContents/starlight-toc"></script>
 
 <script>
-  const tocBtn = document.getElementById('toc-btn')
-  const tocPopover = document.getElementById('toc-popover')
-  const tocIcon = document.getElementById('toc-icon')
-  let isOpen = false
+ const tocBtn = document.getElementById('toc-btn')
+ const tocPopover = document.getElementById('toc-popover')
+ const tocIcon = document.getElementById('toc-icon')
+ let isOpen = false
 
-  const closePopover = () => {
-    isOpen = false
-    tocPopover?.classList.add('invisible', 'opacity-0', '-translate-y-2')
-    tocIcon?.classList.remove('rotate-90')
-  }
+ function closePopover() {
+   isOpen = false
+   tocPopover?.classList.add('invisible', 'opacity-0', '-translate-y-2')
+   tocIcon?.classList.remove('rotate-90')
+ }
 
-  tocBtn?.addEventListener('click', () => {
-    isOpen = !isOpen
+ tocBtn?.addEventListener('click', () => {
+   isOpen = !isOpen
 
-    if (isOpen) {
-      tocPopover?.classList.remove('invisible', 'opacity-0', '-translate-y-2')
-      tocIcon?.classList.add('rotate-90')
-    } else {
-      closePopover()
-    }
-  })
+   if (isOpen) {
+     tocPopover?.classList.remove('invisible', 'opacity-0', '-translate-y-2')
+     tocIcon?.classList.add('rotate-90')
+   }
+   else {
+     closePopover()
+   }
+ })
 
-  // 监听目录列表的点击事件
-  tocPopover?.addEventListener('click', (e) => {
-    if (e.target instanceof HTMLAnchorElement) {
-      closePopover()
-    }
-  })
+ tocPopover?.addEventListener('click', (e) => {
+   if (e.target instanceof HTMLAnchorElement) {
+     closePopover()
+   }
+ })
 </script>

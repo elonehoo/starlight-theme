@@ -23,13 +23,10 @@ dataAttributes['data-strip-trailing-slash'] = ''
   </button>
 
   <dialog style="padding:0" aria-label={Astro.locals.t('search.label')}>
-    <div class="dialog-frame sl-flex">
+    <div class="dialog-frame sl-flex mt-2 md:mt-0">
       {
         /* TODO: Make the layout of this button flexible to accommodate different word lengths. Currently hard-coded for English: “Cancel” */
       }
-      <button data-close-modal class="sl-flex md:sl-hidden">
-        {Astro.locals.t('search.cancelLabel')}
-      </button>
       {
         import.meta.env.DEV
         ? (
@@ -43,6 +40,9 @@ dataAttributes['data-strip-trailing-slash'] = ''
           </div>
         )
       }
+      <button data-close-modal class="sl-flex md:sl-hidden absolute right-2 top-2">
+        Cancel
+      </button>
     </div>
   </dialog>
 </site-search>

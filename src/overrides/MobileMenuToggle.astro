@@ -1,14 +1,38 @@
-<button class="show-modal" popovertargetaction="toggle" popovertarget="drawer">
-  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><!-- Icon from Carbon by IBM - undefined --><path fill="currentColor" d="M4 6h24v2H4zm0 18h24v2H4zm0-12h24v2H4zm0 6h24v2H4z" /></svg>
+<button
+  class="[all:unset] inline-flex h-8 w-8 items-center
+  justify-center text-4 leading-6 text-foreground"
+  popovertargetaction="toggle"
+  popovertarget="drawer"
+>
+  <div class="relative size-3 flex flex-col justify-around items-end">
+    <span class="block w-2.5 h-[1px] bg-current rounded-full transition-all"></span>
+    <span class="block w-3 h-[1px] bg-current rounded-full transition-all"></span>
+    <span class="block w-1.5 h-[1px] bg-current rounded-full transition-all"></span>
+  </div>
   <span class="sr-only">Toggle Menu</span>
 </button>
+
+<div id="drawer" popover="auto" class="drawer">
+  <slot />
+</div>
 
 <style>
   button {
     --at-apply: [all:unset] inline-flex h-8 w-8 items-center justify-center text-4 leading-6 text-foreground;
   }
 
-  button > svg {
-    --at-apply: size-4;
+  .drawer {
+    --at-apply: fixed inset-0 bg-background z-50 p-4 w-screen h-screen;
+    --at-apply: flex flex-col;
+  }
+
+  .drawer:not([popover-open]) {
+    display: none;
+  }
+
+  @media (min-width: 50em) {
+    .drawer {
+      display: none;
+    }
   }
 </style>

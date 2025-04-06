@@ -1,5 +1,4 @@
 ---
-import Drawer from '../components/Drawer.astro'
 import Footer from '../components/Footer.astro'
 import MobilePageMenu from '../components/MobilePageMenu.astro'
 
@@ -19,7 +18,7 @@ const { hasSidebar } = Astro.locals.starlightRoute
         </div>
       </div>
     </header>
-    <MobilePageMenu/>
+    <MobilePageMenu />
     <main class="flex flex-1 flex-col">
       {!hasSidebar && <slot />}
 
@@ -48,5 +47,4 @@ const { hasSidebar } = Astro.locals.starlightRoute
     </main>
     <Footer />
   </div>
-  <Drawer />
 </div>

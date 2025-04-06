@@ -18,7 +18,7 @@ const { hasSidebar } = Astro.locals.starlightRoute
         </div>
       </div>
     </header>
-    <MobilePageMenu />
+    {hasSidebar && <MobilePageMenu />}
     <main class="flex flex-1 flex-col">
       {!hasSidebar && <slot />}
 

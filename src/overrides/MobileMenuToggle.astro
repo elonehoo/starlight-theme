@@ -1,6 +1,11 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import userConfig from 'virtual:starlight-theme-destyler-config'
+import { getTranslation } from '../components/NavBar.astro'
+---
+
 <button
-  class="[all:unset] inline-flex h-8 w-8 items-center
-  justify-center text-4 leading-6 text-foreground"
+  class="[all:unset] inline-flex h-8 w-8 items-center justify-center text-4 leading-6 text-foreground"
   id="mobile-menu-toggle"
 >
   <div class="relative size-3 flex flex-col justify-around items-end" id="menu-icon">
@@ -11,64 +16,62 @@
   <span class="sr-only">Toggle Menu</span>
 </button>
 
-<dialog id="drawer" class="drawer">
+<dialog
+  id="drawer"
+  class="border-none bg-transparent p-0 m-0 fixed w-full h-[calc(100%-var(--header-height,3rem))] top-[var(--header-height,3rem)] z-50 md:hidden"
+>
   <div
     id="drawer-content"
-    class="drawer-content fixed top-[var(--header-height,3rem)] left-0 right-0 bg-background z-50000 p-4 w-full
+    class="drawer-content transform -translate-y-full transition-transform duration-300
+    fixed top-[var(--header-height,3rem)] left-0 right-0 bg-background z-50000 p-4 w-full
     h-100vh flex flex-col overflow-auto"
   >
-    123131
+    <nav class="flex flex-col gap-4 w-full mt-4">
+      {
+        userConfig.navLinks?.map((nav) => {
+          const absoluteLinkRegex = /^https?:\/\//
+
+          const link
+            = !absoluteLinkRegex.test(nav.link) && Astro.currentLocale
+              ? getRelativeLocaleUrl(Astro.currentLocale, nav.link)
+              : nav.link
+          const label = typeof nav.label === 'string' ? nav.label : getTranslation(nav.label, nav.link, 'label')
+          const isExternal = absoluteLinkRegex.test(nav.link)
+
+          return (
+            <a
+              href={link}
+              class="flex items-center justify-between px-3 rounded-md text-lg
+              font-medium transition-all border-b border-border pb-3 mb-1
+              text-foreground/80 hover:text-foreground hover:bg-foreground/5
+              active:scale-98 active:bg-foreground/10"
+              {...nav.attrs}
+            >
+              <div class="flex items-center">
+                <span class="mr-1">{label}</span>
+                {nav.badge && <span class="text-xs bg-#adfa1d text-dark rounded-full px-2 py-0.5 ml-2">{nav.badge}</span>}
+              </div>
+              <div class="flex items-center">
+                {isExternal && <span class="text-base op-50 i-carbon-arrow-up-right"></span>}
+              </div>
+            </a>
+          )
+        })
+      }
+    </nav>
   </div>
 </dialog>
 
 <style>
-  button {
-    --at-apply: [all:unset] inline-flex h-8 w-8 items-center justify-center text-4 leading-6 text-foreground;
-  }
-
-  .drawer {
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    position: fixed;
-    width: 100%;
-    height: calc(100% - var(--header-height, 3rem));
-    top: var(--header-height, 3rem);
-    z-index: 50;
-  }
-
+  /* 只保留复杂的样式，其他都移到标签上 */
   .drawer::backdrop {
     background: transparent;
-  }
-
-  .drawer-content {
-    transform: translateY(-100%);
-    transition: transform 0.3s ease;
   }
 
   dialog[open] .drawer-content {
     transform: translateY(0);
   }
 
-  /* 添加X图标的样式 */
-  #menu-icon.active span:nth-child(1) {
-    transform: translateY(4px) rotate(45deg);
-    width: 3px;
-    height: 14px;
-  }
-
-  #menu-icon.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  #menu-icon.active span:nth-child(3) {
-    transform: translateY(-4px) rotate(-45deg);
-    width: 3px;
-    height: 14px;
-  }
-
-  /* 修复X图标的样式 */
   #menu-icon.active {
     justify-content: center;
     align-items: center;
@@ -76,13 +79,16 @@
 
   #menu-icon.active span {
     position: absolute;
-    width: 100%;
-    height: 2px;
+    margin: 0;
+    width: 12px;
+    height: 1.5px;
+    background-color: currentColor;
+    border-radius: 2px;
+    transition: all 0.3s ease;
   }
 
   #menu-icon.active span:nth-child(1) {
     transform: rotate(45deg);
-    width: 14px;
   }
 
   #menu-icon.active span:nth-child(2) {
@@ -91,7 +97,6 @@
 
   #menu-icon.active span:nth-child(3) {
     transform: rotate(-45deg);
-    width: 14px;
   }
 
   /* 禁止滚动时的body样式 */
@@ -100,12 +105,6 @@
     height: 100vh;
     touch-action: none;
     -ms-touch-action: none;
-  }
-
-  @media (min-width: 50em) {
-    .drawer {
-      display: none !important;
-    }
   }
 </style>
 
@@ -136,8 +135,8 @@ drawer?.addEventListener('click', (e) => {
   if (rect
     && (e.clientY < rect.top
       || e.clientY > rect.bottom
-       || e.clientX < rect.left
-       || e.clientX > rect.right)) {
+      || e.clientX < rect.left
+      || e.clientX > rect.right)) {
     drawer.close()
     menuIcon?.classList.remove('active')
     document.body.classList.remove('no-scroll') // 恢复背景滚动

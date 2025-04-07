@@ -51,6 +51,10 @@
   },
   "peerDependencies": {
     "@astrojs/starlight": ">=0.30.0",
+    "@iconify-json/carbon": ">=1.2.8",
+    "@iconify-json/lineicons": ">=1.2.4",
+    "@iconify-json/logos": ">=1.2.4",
+    "@iconify-json/lucide": ">=1.2.32",
     "@unocss/reset": ">=0.62.4",
     "unocss": ">=0.62.4",
     "unocss-preset-animations": ">=1.1.0"

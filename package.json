@@ -71,7 +71,7 @@
     "@iconify-json/carbon": "^1.2.8",
     "@iconify-json/lineicons": "^1.2.4",
     "@iconify-json/logos": "^1.2.4",
-    "@iconify-json/lucide": "^1.2.32",
+    "@iconify-json/lucide": "^1.2.34",
     "@types/node": "catalog:",
     "@unocss/reset": "catalog:",
     "astro": "catalog:",

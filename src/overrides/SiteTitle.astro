@@ -29,9 +29,7 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute
       </>
     )
   }
-  <span class:list={[{ 'sr-only': config.logo?.replacesTitle }, 'title-text']}>
-    {siteTitle}
-  </span>
+  <span class:list={[{ 'sr-only': config.logo?.replacesTitle }, 'title-text']} set:html={siteTitle} />
 </a>
 
 <style>

@@ -90,7 +90,7 @@ export default defineConfig({
       social: {
         github: 'https://github.com/destyler/starlight-theme-destyler',
       },
-      title: '@destyler/theme',
+      title: '@destyler/<span class="text-primary">theme</span>',
     }),
   ],
   vite: {

@@ -12,7 +12,7 @@ const { custom, classList } = Astro.props as Props
 const isCustom = custom ?? false
 ---
 
-<div class:list={isCustom ? classList : 'sidebar overflow-auto h-full pr-4 pl-4 py-6 [scrollbar-width:none] lg:py-8 border-l border-dashed border-border' }>
+<div class:list={isCustom ? classList : 'sidebar overflow-auto h-full pr-4 pl-4 py-6 [scrollbar-width:none] lg:py-8 border-l border-dashed border-border'}>
   <slot name="header" />
   <div class="gap-6 flex-col flex">
     <SidebarSublist sublist={sidebar} />

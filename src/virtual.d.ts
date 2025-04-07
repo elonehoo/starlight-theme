@@ -24,7 +24,8 @@ declare module 'virtual:starlight/pagefind-config' {
 }
 
 declare module 'virtual:user-component:Sidebar' {
-  import type { AstroComponentFactory } from 'astro';
-  const Sidebar: AstroComponentFactory;
-  export default Sidebar;
+  import type { AstroComponentFactory } from 'astro'
+
+  const Sidebar: AstroComponentFactory
+  export default Sidebar
 }

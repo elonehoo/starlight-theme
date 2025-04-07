@@ -1,7 +1,7 @@
 import type { ViteUserConfig } from 'astro'
-import type { StarlightThemeBlackConfig } from './config'
+import type { StarlightThemeDestylerConfig } from './config'
 
-export function vitePluginStarlightThemeBlack(config: StarlightThemeBlackConfig): VitePlugin {
+export function vitePluginStarlightThemeDestyler(config: StarlightThemeDestylerConfig): VitePlugin {
   const moduleId = 'virtual:starlight-theme-destyler-config'
   const resolvedModuleId = `\0${moduleId}`
   const moduleContent = `export default ${JSON.stringify(config)}`

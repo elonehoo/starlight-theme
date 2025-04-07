@@ -1,12 +1,12 @@
 import type { StarlightPlugin } from '@astrojs/starlight/types'
 
-import type { StarlightThemeBlackUserConfig } from './libs/config'
-import { StarlightThemeBlackConfigSchema } from './libs/config'
+import type { StarlightThemeDestylerUserConfig } from './libs/config'
+import { StarlightThemeDestylerConfigSchema } from './libs/config'
 import { overrideComponents } from './libs/starlight'
-import { vitePluginStarlightThemeBlack } from './libs/vite'
+import { vitePluginStarlightThemeDestyler } from './libs/vite'
 
-export default function starlightThemeBlack(userConfig: StarlightThemeBlackUserConfig): StarlightPlugin {
-  const parsedConfig = StarlightThemeBlackConfigSchema.safeParse(userConfig)
+export default function starlightThemeDestyler(userConfig: StarlightThemeDestylerUserConfig): StarlightPlugin {
+  const parsedConfig = StarlightThemeDestylerConfigSchema.safeParse(userConfig)
 
   if (!parsedConfig.success) {
     throw new Error(`The provided plugin configuration is invalid.\n${parsedConfig.error.issues.map(issue => issue.message).join('\n')}`)
@@ -76,7 +76,7 @@ export default function starlightThemeBlack(userConfig: StarlightThemeBlackUserC
           name: 'starlight-theme-destyler-integration',
           hooks: {
             'astro:config:setup': ({ updateConfig }) => {
-              updateConfig({ vite: { plugins: [vitePluginStarlightThemeBlack(config)] } })
+              updateConfig({ vite: { plugins: [vitePluginStarlightThemeDestyler(config)] } })
             },
           },
         })

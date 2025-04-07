@@ -1,7 +1,7 @@
 declare module 'virtual:starlight-theme-destyler-config' {
-  const StarlightThemeBlackConfig: import('./libs/config').StarlightThemeBlackConfig
+  const StarlightThemeDestylerConfig: import('./libs/config').StarlightThemeDestylerConfig
 
-  export default StarlightThemeBlackConfig
+  export default StarlightThemeDestylerConfig
 }
 
 declare module 'virtual:starlight/user-config' {

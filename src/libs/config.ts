@@ -55,10 +55,10 @@ const footer = z.object({
   social: z.array(footerSocialItem).optional(),
 })
 
-export const StarlightThemeBlackConfigSchema = z.object({
+export const StarlightThemeDestylerConfigSchema = z.object({
   navLinks: z.array(navLinkSchema).optional(),
   footer: footer.optional(),
 })
 
-export type StarlightThemeBlackUserConfig = z.input<typeof StarlightThemeBlackConfigSchema>
-export type StarlightThemeBlackConfig = z.output<typeof StarlightThemeBlackConfigSchema>
+export type StarlightThemeDestylerUserConfig = z.input<typeof StarlightThemeDestylerConfigSchema>
+export type StarlightThemeDestylerConfig = z.output<typeof StarlightThemeDestylerConfigSchema>
